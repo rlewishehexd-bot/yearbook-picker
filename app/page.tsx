@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { CheckCircle } from 'lucide-react';
 
 const photos = [
@@ -13,7 +12,6 @@ const photos = [
   '/photo6.JPG',
 ];
 
-// Ivy League preppy colors
 const ivyGreen = '#1B4D3E';
 const mustardYellow = '#D4A01B';
 const ivyMutedGreen = '#3D6654';
@@ -66,7 +64,7 @@ export default function YearbookPickerPage() {
             }}
           >
             <div
-              className={`w-full aspect-[4/5] overflow-hidden rounded-lg relative`}
+              className="w-full aspect-[4/5] overflow-hidden rounded-lg"
               style={{
                 border: selected
                   ? `2px solid ${mustardYellow}`
@@ -74,23 +72,12 @@ export default function YearbookPickerPage() {
               }}
             >
               {selected ? (
-                <>
-                  <Image
-                    src={selected}
-                    alt="Selected"
-                    fill
-                    style={{ objectFit: 'cover' }}
-                  />
-                  <div
-                    className="absolute top-1 right-1 rounded-full p-1"
-                    style={{ backgroundColor: 'white' }}
-                  >
-                    <CheckCircle
-                      className="w-6 h-6"
-                      style={{ color: mustardYellow }}
-                    />
-                  </div>
-                </>
+                <img
+                  src={selected}
+                  alt="Selected"
+                  className="w-full h-full object-cover"
+                  style={{ borderRadius: '0.5rem' }}
+                />
               ) : (
                 <div
                   className="w-full h-full flex items-center justify-center text-center"
@@ -130,37 +117,21 @@ export default function YearbookPickerPage() {
                 {photos.map((photo) => (
                   <div
                     key={photo}
-                    className="relative cursor-pointer w-full h-full rounded-lg"
+                    className="cursor-pointer w-full h-full rounded-lg"
                     onClick={() => setSelected(photo)}
                   >
-                    <div
-                      className={`w-full h-full aspect-[4/5] rounded-lg`}
+                    <img
+                      src={photo}
+                      alt={`Thumbnail of ${photo}`}
+                      className={`w-full h-full object-cover rounded-lg`}
                       style={{
                         border:
                           selected === photo
                             ? `2px solid ${mustardYellow}`
-                            : `2px solid transparent`,
+                            : '2px solid transparent',
                         transition: 'border 0.2s',
                       }}
-                    >
-                      <Image
-                        src={photo}
-                        alt={`Thumbnail of ${photo}`}
-                        fill
-                        style={{ objectFit: 'cover', borderRadius: '0.5rem' }}
-                      />
-                    </div>
-                    {selected === photo && (
-                      <div
-                        className="absolute top-1 right-1 rounded-full p-1"
-                        style={{ backgroundColor: 'white' }}
-                      >
-                        <CheckCircle
-                          className="w-5 h-5"
-                          style={{ color: mustardYellow }}
-                        />
-                      </div>
-                    )}
+                    />
                   </div>
                 ))}
               </div>
