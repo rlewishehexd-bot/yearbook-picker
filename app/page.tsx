@@ -9,12 +9,14 @@ import {
   getDocs,
   updateDoc,
   serverTimestamp,
+  Timestamp, // <-- Import Timestamp type
 } from 'firebase/firestore';
 import { CheckCircle } from 'lucide-react';
+import Image from 'next/image'; // <-- Import Next.js Image component
 
 type Photo = {
   url: string;
-  timestamp: any;
+  timestamp: Timestamp; // <-- Corrected type from 'any' to 'Timestamp'
 };
 
 type Student = {
@@ -25,14 +27,14 @@ type Student = {
   photos?: Photo[];
 };
 
-const green = 'green-800';
+// Removed unused variable 'green'
 
 export default function YearbookPickerPage() {
   const [code, setCode] = useState('');
   const [student, setStudent] = useState<Student | null>(null);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // <-- We will now use this
   const [error, setError] = useState('');
 
   // Fetch student and photos when code is entered
@@ -121,8 +123,10 @@ export default function YearbookPickerPage() {
                 <button
                   onClick={fetchStudentData}
                   className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition"
+                  disabled={loading} // <-- Disable button while loading
                 >
-                  Submit
+                  {loading ? 'Loading...' : 'Submit'}{' '}
+                  {/* <-- Show loading state */}
                 </button>
                 {error && <p className="text-red-500">{error}</p>}
               </div>
@@ -130,10 +134,13 @@ export default function YearbookPickerPage() {
               <div className="w-full aspect-[4/5] relative cursor-pointer ring-2 ring-green-800">
                 {student.hasChosen && student.chosenPhotoUrl ? (
                   <div className="relative w-full h-full">
-                    <img
+                    {/* Use Next.js Image component */}
+                    <Image
                       src={student.chosenPhotoUrl}
                       alt="Previously chosen photo"
-                      className="w-full h-full object-cover rounded-lg"
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-lg"
                     />
                     <div className="absolute top-1 right-1 rounded-full p-1 bg-white flex items-center justify-center">
                       <CheckCircle className="w-6 h-6 text-green-800" />
@@ -166,15 +173,18 @@ export default function YearbookPickerPage() {
                   return (
                     <div
                       key={photo.url}
-                      className={`relative cursor-pointer w-full h-full rounded-lg ring-2 ring-green-800 ${
+                      className={`relative cursor-pointer w-full h-full aspect-[4/5] rounded-lg ring-2 ring-green-800 ${
                         isSelected ? 'ring-offset-2' : 'hover:ring-green-800'
                       } transition-all`}
                       onClick={() => setSelected(photo.url)}
                     >
-                      <img
+                      {/* Use Next.js Image component */}
+                      <Image
                         src={photo.url}
                         alt="photo"
-                        className="w-full h-full object-cover rounded-lg"
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-lg"
                       />
                       {isSelected && (
                         <div className="absolute top-1 right-1 rounded-full p-1 bg-white flex items-center justify-center">
@@ -192,6 +202,7 @@ export default function YearbookPickerPage() {
               <button
                 onClick={handleConfirm}
                 className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold transition-all duration-150 active:shadow-inner active:bg-green-900"
+                disabled={!selected} // <-- Disable if no photo is selected
               >
                 Confirm
               </button>
