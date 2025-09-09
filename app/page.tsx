@@ -4,16 +4,15 @@ import { useState } from 'react';
 import { CheckCircle } from 'lucide-react';
 
 const photos = [
-  '/photo1.jpg',
-  '/photo2.jpg',
-  '/photo3.jpg',
-  '/photo4.jpg',
-  '/photo5.jpg',
-  '/photo6.jpg',
+  '/photo1.JPG',
+  '/photo2.JPG',
+  '/photo3.JPG',
+  '/photo4.JPG',
+  '/photo5.JPG',
+  '/photo6.JPG',
 ];
 
 const ivyGreen = '#1B4D3E';
-const mustardYellow = '#D4A01B';
 const ivyMutedGreen = '#3D6654';
 
 export default function YearbookPickerPage() {
@@ -28,7 +27,7 @@ export default function YearbookPickerPage() {
 
   return (
     <div className="w-screen min-h-screen flex flex-col items-center bg-gradient-to-b from-white to-zinc-50 p-6">
-      {/* Main content container with Ivy Green border */}
+      {/* Main content container */}
       <div
         className="flex flex-col md:flex-row w-full p-4"
         style={{
@@ -52,7 +51,7 @@ export default function YearbookPickerPage() {
             Yearbook Picture Tool
           </h1>
 
-          {/* Chosen Photo */}
+          {/* Selected Photo */}
           <div
             className="bg-white rounded-2xl flex flex-col items-center w-full relative"
             style={{
@@ -63,20 +62,21 @@ export default function YearbookPickerPage() {
             }}
           >
             <div
-              className="w-full aspect-[4/5] overflow-hidden rounded-lg"
-              style={{
-                border: selected
-                  ? `4px solid ${mustardYellow}`
-                  : `2px solid ${ivyGreen}`,
-              }}
+              className={`w-full aspect-[4/5] overflow-hidden rounded-lg cursor-pointer
+                ${selected ? 'ring-2 ring-green-400' : ''}`}
+              onClick={() => selected && setSelected(selected)}
             >
               {selected ? (
-                <img
-                  src={selected}
-                  alt="Selected"
-                  className="w-full h-full object-cover"
-                  style={{ borderRadius: '0.5rem' }}
-                />
+                <div className="relative w-full h-full">
+                  <img
+                    src={selected}
+                    alt="Selected"
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                  <div className="absolute top-1 right-1 rounded-full p-1 bg-white flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6 text-green-400" />
+                  </div>
+                </div>
               ) : (
                 <div
                   className="w-full h-full flex items-center justify-center text-center"
@@ -95,7 +95,7 @@ export default function YearbookPickerPage() {
           </div>
         </div>
 
-        {/* Right Column: Gallery + Confirm Box */}
+        {/* Right Column */}
         <div className="flex-1 flex flex-col">
           <div className="flex flex-col flex-1" style={{ gap: `${baseGap}px` }}>
             {/* Photo Gallery */}
@@ -116,21 +116,21 @@ export default function YearbookPickerPage() {
                 {photos.map((photo) => (
                   <div
                     key={photo}
-                    className="cursor-pointer w-full h-full rounded-lg"
+                    className={`relative cursor-pointer w-full h-full rounded-lg
+                      ${selected === photo ? 'ring-2 ring-green-400' : ''} 
+                      hover:ring-2 hover:ring-green-400 transition-all`}
                     onClick={() => setSelected(photo)}
                   >
                     <img
                       src={photo}
                       alt={`Thumbnail of ${photo}`}
-                      className={`w-full h-full object-cover rounded-lg`}
-                      style={{
-                        border:
-                          selected === photo
-                            ? `4px solid ${mustardYellow}`
-                            : '2px solid transparent',
-                        transition: 'border 0.2s',
-                      }}
+                      className="w-full h-full object-cover rounded-lg"
                     />
+                    {selected === photo && (
+                      <div className="absolute top-1 right-1 rounded-full p-1 bg-white flex items-center justify-center">
+                        <CheckCircle className="w-5 h-5 text-green-400" />
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -156,7 +156,7 @@ export default function YearbookPickerPage() {
                   <button
                     className="rounded-full px-6 py-2 font-semibold transition-all duration-150"
                     style={{
-                      backgroundColor: mustardYellow,
+                      backgroundColor: 'green',
                       color: 'whitesmoke',
                       cursor: 'pointer',
                       fontWeight: 600,
