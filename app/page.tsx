@@ -34,7 +34,6 @@ export default function YearbookPickerPage() {
         style={{
           maxWidth: `${maxContentWidth}px`,
           gap: `${baseGap}px`,
-          border: `2px solid ${ivyGreen}`,
           borderRadius: '1rem',
           backgroundColor: 'white',
         }}
@@ -67,7 +66,7 @@ export default function YearbookPickerPage() {
               className="w-full aspect-[4/5] overflow-hidden rounded-lg"
               style={{
                 border: selected
-                  ? `2px solid ${mustardYellow}`
+                  ? `4px solid ${mustardYellow}`
                   : `2px solid ${ivyGreen}`,
               }}
             >
@@ -127,7 +126,7 @@ export default function YearbookPickerPage() {
                       style={{
                         border:
                           selected === photo
-                            ? `2px solid ${mustardYellow}`
+                            ? `4px solid ${mustardYellow}`
                             : '2px solid transparent',
                         transition: 'border 0.2s',
                       }}
