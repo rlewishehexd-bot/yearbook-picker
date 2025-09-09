@@ -12,8 +12,8 @@ const photos = [
   '/photo6.jpg',
 ];
 
-const ivyGreen = '#1B4D3E';
-const ivyMutedGreen = '#3D6654';
+const mutedGreen = '#3D6654';
+const green800 = '#166534';
 
 export default function YearbookPickerPage() {
   const [selected, setSelected] = useState<string | null>(null);
@@ -45,7 +45,7 @@ export default function YearbookPickerPage() {
               fontSize: titleFont,
               marginBottom: `${baseGap}px`,
               maxWidth: `${maxColumnWidth}px`,
-              color: ivyGreen,
+              color: green800,
             }}
           >
             Yearbook Picture Tool
@@ -57,14 +57,13 @@ export default function YearbookPickerPage() {
             style={{
               padding: `${basePadding}px`,
               maxWidth: `${maxColumnWidth}px`,
-              border: `2px solid ${ivyGreen}`,
-              boxShadow: `0 10px 15px -3px ${ivyGreen}33, 0 4px 6px -2px ${ivyGreen}22`,
+              border: `2px solid ${green800}`,
+              boxShadow: `0 10px 15px -3 ${green800}33, 0 4px 6px -2 ${green800}22`,
             }}
           >
             <div
               className={`w-full aspect-[4/5] overflow-hidden rounded-lg cursor-pointer
-                ${selected ? 'ring-2 ring-green-400' : ''}`}
-              onClick={() => selected && setSelected(selected)}
+                ${selected ? 'ring-2 ring-green-800' : ''}`}
             >
               {selected ? (
                 <div className="relative w-full h-full">
@@ -74,13 +73,13 @@ export default function YearbookPickerPage() {
                     className="w-full h-full object-cover rounded-lg"
                   />
                   <div className="absolute top-1 right-1 rounded-full p-1 bg-white flex items-center justify-center">
-                    <CheckCircle className="w-6 h-6 text-green-400" />
+                    <CheckCircle className="w-6 h-6 text-green-800" />
                   </div>
                 </div>
               ) : (
                 <div
                   className="w-full h-full flex items-center justify-center text-center"
-                  style={{ fontSize: sectionFont, color: ivyMutedGreen }}
+                  style={{ fontSize: sectionFont, color: mutedGreen }}
                 >
                   No Photo Selected
                 </div>
@@ -88,7 +87,7 @@ export default function YearbookPickerPage() {
             </div>
             <h2
               className="font-semibold mt-3"
-              style={{ fontSize: sectionFont, color: ivyGreen }}
+              style={{ fontSize: sectionFont, color: green800 }}
             >
               Selected Photo
             </h2>
@@ -102,13 +101,13 @@ export default function YearbookPickerPage() {
             <div
               className="bg-white rounded-2xl flex flex-col p-4 flex-[2]"
               style={{
-                border: `2px solid ${ivyGreen}`,
-                boxShadow: `0 10px 15px -3px ${ivyGreen}33, 0 4px 6px -2px ${ivyGreen}22`,
+                border: `2px solid ${green800}`,
+                boxShadow: `0 10px 15px -3 ${green800}33, 0 4px 6px -2 ${green800}22`,
               }}
             >
               <h2
                 className="font-bold mb-3"
-                style={{ fontSize: sectionFont, color: ivyGreen }}
+                style={{ fontSize: sectionFont, color: green800 }}
               >
                 Photo Gallery
               </h2>
@@ -117,8 +116,8 @@ export default function YearbookPickerPage() {
                   <div
                     key={photo}
                     className={`relative cursor-pointer w-full h-full rounded-lg
-                      ${selected === photo ? 'ring-2 ring-green-400' : ''} 
-                      hover:ring-2 hover:ring-green-400 transition-all`}
+                      ${selected === photo ? 'ring-2 ring-green-800' : ''}
+                      hover:ring-2 hover:ring-green-800 transition-all`}
                     onClick={() => setSelected(photo)}
                   >
                     <img
@@ -128,7 +127,7 @@ export default function YearbookPickerPage() {
                     />
                     {selected === photo && (
                       <div className="absolute top-1 right-1 rounded-full p-1 bg-white flex items-center justify-center">
-                        <CheckCircle className="w-5 h-5 text-green-400" />
+                        <CheckCircle className="w-5 h-5 text-green-800" />
                       </div>
                     )}
                   </div>
@@ -140,15 +139,15 @@ export default function YearbookPickerPage() {
             <div
               className="bg-white rounded-2xl flex flex-col items-center justify-center p-4 flex-[1]"
               style={{
-                border: `2px solid ${ivyGreen}`,
-                boxShadow: `0 10px 15px -3px ${ivyGreen}33, 0 4px 6px -2px ${ivyGreen}22`,
+                border: `2px solid ${green800}`,
+                boxShadow: `0 10px 15px -3 ${green800}33, 0 4px 6px -2 ${green800}22`,
               }}
             >
               {selected ? (
                 <div className="flex flex-col items-center justify-center h-full space-y-3">
                   <p
                     className="text-center italic"
-                    style={{ fontSize: sectionFont, color: ivyMutedGreen }}
+                    style={{ fontSize: sectionFont, color: mutedGreen }}
                   >
                     Press confirm to finalize this photo.
                   </p>
@@ -156,7 +155,7 @@ export default function YearbookPickerPage() {
                   <button
                     className="rounded-full px-6 py-2 font-semibold transition-all duration-150"
                     style={{
-                      backgroundColor: 'green',
+                      backgroundColor: green800,
                       color: 'whitesmoke',
                       cursor: 'pointer',
                       fontWeight: 600,
@@ -164,7 +163,7 @@ export default function YearbookPickerPage() {
                     }}
                     onMouseDown={(e) =>
                       (e.currentTarget.style.boxShadow =
-                        'inset 0 4px 8px rgba(0,0,0,0.3)')
+                        'inset 0 4px 6px rgba(0,0,0,0.5)')
                     }
                     onMouseUp={(e) =>
                       (e.currentTarget.style.boxShadow = '0 0 0 rgba(0,0,0,0)')
@@ -180,7 +179,7 @@ export default function YearbookPickerPage() {
               ) : (
                 <p
                   className="text-center"
-                  style={{ fontSize: sectionFont, color: ivyMutedGreen }}
+                  style={{ fontSize: sectionFont, color: mutedGreen }}
                 >
                   👉 Choose a photo from the gallery above.
                 </p>
