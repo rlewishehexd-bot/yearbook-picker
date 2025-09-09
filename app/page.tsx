@@ -9,14 +9,14 @@ import {
   getDocs,
   updateDoc,
   serverTimestamp,
-  Timestamp, // <-- Import Timestamp type
+  Timestamp,
 } from 'firebase/firestore';
 import { CheckCircle } from 'lucide-react';
-import Image from 'next/image'; // <-- Import Next.js Image component
+import Image from 'next/image';
 
 type Photo = {
   url: string;
-  timestamp: Timestamp; // <-- Corrected type from 'any' to 'Timestamp'
+  timestamp: Timestamp;
 };
 
 type Student = {
@@ -27,23 +27,21 @@ type Student = {
   photos?: Photo[];
 };
 
-// Removed unused variable 'green'
-
 export default function YearbookPickerPage() {
   const [code, setCode] = useState('');
   const [student, setStudent] = useState<Student | null>(null);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false); // <-- We will now use this
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Fetch student and photos when code is entered
   const fetchStudentData = async () => {
     setError('');
     setLoading(true);
     try {
       const studentRef = doc(db, 'students', code);
       const studentSnap = await getDoc(studentRef);
+
       if (!studentSnap.exists()) {
         setError('Invalid code');
         setStudent(null);
@@ -59,10 +57,10 @@ export default function YearbookPickerPage() {
       const photosSnap = await getDocs(photosCol);
       const photosList: Photo[] = photosSnap.docs
         .map((doc) => doc.data() as Photo)
-        .sort((a, b) => a.timestamp?.seconds - b.timestamp?.seconds);
+        .sort((a, b) => a.timestamp.seconds - b.timestamp.seconds);
       setPhotos(photosList);
 
-      // If student has already chosen a photo, pre-select it
+      // Pre-select if previously chosen
       if (studentData.hasChosen && studentData.chosenPhotoUrl) {
         setSelected(studentData.chosenPhotoUrl);
       }
@@ -74,7 +72,6 @@ export default function YearbookPickerPage() {
     }
   };
 
-  // Handle confirm selection
   const handleConfirm = async () => {
     if (!student || !selected) return;
     try {
@@ -123,24 +120,21 @@ export default function YearbookPickerPage() {
                 <button
                   onClick={fetchStudentData}
                   className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition"
-                  disabled={loading} // <-- Disable button while loading
+                  disabled={loading}
                 >
-                  {loading ? 'Loading...' : 'Submit'}{' '}
-                  {/* <-- Show loading state */}
+                  {loading ? 'Loading...' : 'Submit'}
                 </button>
                 {error && <p className="text-red-500">{error}</p>}
               </div>
             ) : (
               <div className="w-full aspect-[4/5] relative cursor-pointer ring-2 ring-green-800">
-                {student.hasChosen && student.chosenPhotoUrl ? (
+                {selected || (student.hasChosen && student.chosenPhotoUrl) ? (
                   <div className="relative w-full h-full">
-                    {/* Use Next.js Image component */}
                     <Image
-                      src={student.chosenPhotoUrl}
-                      alt="Previously chosen photo"
-                      layout="fill"
-                      objectFit="cover"
-                      className="rounded-lg"
+                      src={selected || student.chosenPhotoUrl!}
+                      alt="Selected photo"
+                      fill
+                      style={{ objectFit: 'cover', borderRadius: '0.5rem' }}
                     />
                     <div className="absolute top-1 right-1 rounded-full p-1 bg-white flex items-center justify-center">
                       <CheckCircle className="w-6 h-6 text-green-800" />
@@ -166,9 +160,11 @@ export default function YearbookPickerPage() {
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3 place-items-center">
                 {photos.map((photo) => {
-                  const isSelected = selected
-                    ? selected === photo.url
-                    : student.hasChosen && student.chosenPhotoUrl === photo.url;
+                  const isSelected =
+                    selected === photo.url ||
+                    (!selected &&
+                      student.hasChosen &&
+                      student.chosenPhotoUrl === photo.url);
 
                   return (
                     <div
@@ -178,13 +174,11 @@ export default function YearbookPickerPage() {
                       } transition-all`}
                       onClick={() => setSelected(photo.url)}
                     >
-                      {/* Use Next.js Image component */}
                       <Image
                         src={photo.url}
                         alt="photo"
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-lg"
+                        fill
+                        style={{ objectFit: 'cover', borderRadius: '0.5rem' }}
                       />
                       {isSelected && (
                         <div className="absolute top-1 right-1 rounded-full p-1 bg-white flex items-center justify-center">
@@ -202,7 +196,7 @@ export default function YearbookPickerPage() {
               <button
                 onClick={handleConfirm}
                 className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold transition-all duration-150 active:shadow-inner active:bg-green-900"
-                disabled={!selected} // <-- Disable if no photo is selected
+                disabled={!selected}
               >
                 Confirm
               </button>
