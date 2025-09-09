@@ -5,12 +5,12 @@ import Image from 'next/image';
 import { CheckCircle } from 'lucide-react';
 
 const photos = [
-  '/photo1.jpg',
-  '/photo2.jpg',
-  '/photo3.jpg',
-  '/photo4.jpg',
-  '/photo5.jpg',
-  '/photo6.jpg',
+  '/photo1.JPG',
+  '/photo2.JPG',
+  '/photo3.JPG',
+  '/photo4.JPG',
+  '/photo5.JPG',
+  '/photo6.JPG',
 ];
 
 // Ivy League preppy colors
