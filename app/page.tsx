@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { CheckCircle } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 const photos = [
   '/photo1.JPG',
@@ -30,14 +30,19 @@ export default function YearbookPickerPage() {
 
   return (
     <div className="w-screen min-h-screen flex flex-col items-center bg-gradient-to-b from-white to-zinc-50 p-6">
-      {/* Main content row */}
+      {/* Main content container with Ivy Green border */}
       <div
-        className="flex flex-col md:flex-row w-full"
-        style={{ maxWidth: `${maxContentWidth}px`, gap: `${baseGap}px` }}
+        className="flex flex-col md:flex-row w-full p-4"
+        style={{
+          maxWidth: `${maxContentWidth}px`,
+          gap: `${baseGap}px`,
+          border: `2px solid ${ivyGreen}`,
+          borderRadius: '1rem',
+          backgroundColor: 'white',
+        }}
       >
-        {/* Left Column: Title + Chosen Photo */}
+        {/* Left Column */}
         <div className="flex-1 flex flex-col justify-center md:justify-start items-center md:items-start">
-          {/* Centered Title */}
           <h1
             className="font-extrabold text-center mx-auto md:mx-0"
             style={{
@@ -70,10 +75,11 @@ export default function YearbookPickerPage() {
             >
               {selected ? (
                 <>
-                  <img
+                  <Image
                     src={selected}
                     alt="Selected"
-                    className="w-full h-full object-cover"
+                    fill
+                    style={{ objectFit: 'cover' }}
                   />
                   <div
                     className="absolute top-1 right-1 rounded-full p-1"
@@ -137,10 +143,11 @@ export default function YearbookPickerPage() {
                         transition: 'border 0.2s',
                       }}
                     >
-                      <img
+                      <Image
                         src={photo}
                         alt={`Thumbnail of ${photo}`}
-                        className="w-full h-full object-cover rounded-lg"
+                        fill
+                        style={{ objectFit: 'cover', borderRadius: '0.5rem' }}
                       />
                     </div>
                     {selected === photo && (
@@ -176,30 +183,29 @@ export default function YearbookPickerPage() {
                     Press confirm to finalize this photo.
                   </p>
 
-                  {/* Enhanced Confirm Button */}
-                  <motion.button
-                    whileHover={{
-                      filter: 'brightness(1.1)',
-                      boxShadow: `inset 0 4px 10px rgba(0,0,0,0.2)`,
-                    }}
-                    whileTap={{
-                      filter: 'brightness(0.95)',
-                      boxShadow: `inset 0 6px 14px rgba(0,0,0,0.35)`,
-                    }}
-                    transition={{ type: 'tween', duration: 0.15 }}
-                    className="rounded-full px-6 py-2 font-semibold"
+                  <button
+                    className="rounded-full px-6 py-2 font-semibold transition-all duration-150"
                     style={{
                       backgroundColor: mustardYellow,
                       color: 'whitesmoke',
                       cursor: 'pointer',
                       fontWeight: 600,
-                      boxShadow: 'none', // start bright
-                      transition: 'all 0.15s ease',
+                      boxShadow: '0 0 0 rgba(0,0,0,0)',
                     }}
+                    onMouseDown={(e) =>
+                      (e.currentTarget.style.boxShadow =
+                        'inset 0 4px 8px rgba(0,0,0,0.3)')
+                    }
+                    onMouseUp={(e) =>
+                      (e.currentTarget.style.boxShadow = '0 0 0 rgba(0,0,0,0)')
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.boxShadow = '0 0 0 rgba(0,0,0,0)')
+                    }
                     onClick={() => console.log(`Photo ${selected} confirmed!`)}
                   >
                     Confirm
-                  </motion.button>
+                  </button>
                 </div>
               ) : (
                 <p
