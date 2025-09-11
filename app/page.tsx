@@ -17,7 +17,7 @@ import Image from 'next/image';
 type Photo = {
   url: string;
   timestamp: Timestamp;
-  name: string; // original filename
+  originalName: string; // use this field from Firestore
 };
 
 type Student = {
@@ -59,10 +59,7 @@ export default function YearbookPickerPage() {
       const photosSnap = await getDocs(photosCol);
       const photosList: Photo[] = photosSnap.docs
         .map((doc) => doc.data() as Photo)
-        .filter((p) => p.url) // filter out invalid photos
-        .sort(
-          (a, b) => (a.timestamp?.seconds ?? 0) - (b.timestamp?.seconds ?? 0)
-        );
+        .sort((a, b) => a.timestamp.seconds - b.timestamp.seconds);
       setPhotos(photosList);
 
       // Pre-select if previously chosen
@@ -80,14 +77,12 @@ export default function YearbookPickerPage() {
   const handleConfirm = async () => {
     if (!student || !selected) return;
     try {
-      setLoading(true);
-      // Find the chosen photo in our local state
       const chosenPhoto = photos.find((p) => p.url === selected);
 
       const studentRef = doc(db, 'students', code);
       await updateDoc(studentRef, {
         chosenPhotoUrl: selected,
-        chosenPhotoName: chosenPhoto?.name ?? null, // store original name, safe fallback
+        chosenPhotoName: chosenPhoto?.originalName ?? null, // <-- only change
         hasChosen: true,
         choiceTimestamp: serverTimestamp(),
       });
@@ -96,14 +91,12 @@ export default function YearbookPickerPage() {
       setStudent({
         ...student,
         chosenPhotoUrl: selected,
-        chosenPhotoName: chosenPhoto?.name ?? null,
+        chosenPhotoName: chosenPhoto?.originalName ?? null, // <-- only change
         hasChosen: true,
       });
     } catch (err) {
       console.error(err);
       alert('Error updating selection');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -214,7 +207,7 @@ export default function YearbookPickerPage() {
               <button
                 onClick={handleConfirm}
                 className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold transition-all duration-150 active:shadow-inner active:bg-green-900"
-                disabled={!selected || loading} // disable during update
+                disabled={!selected || loading}
               >
                 Confirm
               </button>
