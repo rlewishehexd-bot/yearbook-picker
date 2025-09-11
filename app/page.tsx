@@ -17,12 +17,14 @@ import Image from 'next/image';
 type Photo = {
   url: string;
   timestamp: Timestamp;
+  name: string; // Added for original filename
 };
 
 type Student = {
   firstName: string;
   lastName: string;
   chosenPhotoUrl?: string;
+  chosenPhotoName?: string;
   hasChosen?: boolean;
   photos?: Photo[];
 };
@@ -75,14 +77,24 @@ export default function YearbookPickerPage() {
   const handleConfirm = async () => {
     if (!student || !selected) return;
     try {
+      // Find the chosen photo in our local state
+      const chosenPhoto = photos.find((p) => p.url === selected);
+
       const studentRef = doc(db, 'students', code);
       await updateDoc(studentRef, {
         chosenPhotoUrl: selected,
+        chosenPhotoName: chosenPhoto ? chosenPhoto.name : null, // store original name
         hasChosen: true,
         choiceTimestamp: serverTimestamp(),
       });
+
       alert('Photo confirmed!');
-      setStudent({ ...student, chosenPhotoUrl: selected, hasChosen: true });
+      setStudent({
+        ...student,
+        chosenPhotoUrl: selected,
+        chosenPhotoName: chosenPhoto ? chosenPhoto.name : undefined,
+        hasChosen: true,
+      });
     } catch (err) {
       console.error(err);
       alert('Error updating selection');
