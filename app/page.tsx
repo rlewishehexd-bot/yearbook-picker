@@ -76,13 +76,15 @@ export default function YearbookPickerPage() {
 
   const handleConfirm = async () => {
     if (!student || !selected) return;
+
     try {
+      // Always find the currently selected photo
       const chosenPhoto = photos.find((p) => p.url === selected);
 
       const studentRef = doc(db, 'students', code);
       await updateDoc(studentRef, {
         chosenPhotoUrl: selected,
-        chosenPhotoName: chosenPhoto?.originalName ?? null, // <-- only change
+        chosenPhotoName: chosenPhoto?.originalName ?? null, // update every time
         hasChosen: true,
         choiceTimestamp: serverTimestamp(),
       });
@@ -91,7 +93,7 @@ export default function YearbookPickerPage() {
       setStudent({
         ...student,
         chosenPhotoUrl: selected,
-        chosenPhotoName: chosenPhoto?.originalName ?? null, // <-- only change
+        chosenPhotoName: chosenPhoto?.originalName ?? null, // local state updated
         hasChosen: true,
       });
     } catch (err) {
