@@ -51,8 +51,8 @@ export default function YearbookPickerPage() {
 
     const trimmedCode = code.trim();
     if (!trimmedCode) {
-        setError("Please enter a code.");
-        return;
+      setError('Please enter a code.');
+      return;
     }
 
     setLoading(true);
@@ -90,7 +90,6 @@ export default function YearbookPickerPage() {
       } else if (photosList.length > 0) {
         setSelected(photosList[0].url);
       }
-
     } catch (err) {
       console.error(err);
       setError('Error fetching data.');
@@ -122,13 +121,16 @@ export default function YearbookPickerPage() {
       setSuccess('Photo confirmed!');
 
       // Update local state
-      setStudent(prevStudent => prevStudent ? {
-        ...prevStudent,
-        chosenPhotoUrl: selected,
-        chosenPhotoName: chosenPhoto?.originalName ?? null,
-        hasChosen: true,
-      } : null);
-
+      setStudent((prevStudent) =>
+        prevStudent
+          ? {
+              ...prevStudent,
+              chosenPhotoUrl: selected,
+              chosenPhotoName: chosenPhoto?.originalName ?? null,
+              hasChosen: true,
+            }
+          : null
+      );
     } catch (err) {
       console.error(err);
       setError('Error updating selection.');
@@ -156,9 +158,24 @@ export default function YearbookPickerPage() {
 
           {/* Student Welcome */}
           {student && (
-              <p className="text-lg font-medium text-gray-700 mb-4">
-                  Welcome, <span className="font-bold text-green-800">{student.firstName} {student.lastName}</span>
+            <div className="text-gray-700 mb-6 w-full">
+              <p className="text-lg font-medium mb-1">
+                Welcome,{' '}
+                <span className="font-bold text-green-800">
+                  {student.firstName} {student.lastName}
+                </span>
               </p>
+              <p className="text-base font-semibold text-red-600 mb-2">
+                Don&apos;t forget to submit your chosen photo, order form, and
+                payment by your department&apos;s deadline!
+              </p>
+              <ul className="list-disc list-inside text-sm font-medium ml-4">
+                <li className="mb-0.5">ES: October 24</li>
+                <li className="mb-0.5">MS: October 10</li>
+                <li className="mb-0.5">HS Undergrad: October 10</li>
+                <li className="mb-0.5">Seniors: October 18</li>
+              </ul>
+            </div>
           )}
 
           {/* Selected Photo / Enter Code */}
@@ -171,7 +188,9 @@ export default function YearbookPickerPage() {
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                   className="border-2 border-green-800 rounded-lg px-3 py-2 w-64 text-center focus:ring-2 focus:ring-green-600 focus:border-green-600 outline-none"
-                  onKeyDown={(e) => { if (e.key === 'Enter') fetchStudentData(); }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') fetchStudentData();
+                  }}
                   autoComplete="off"
                   disabled={loading}
                 />
@@ -180,11 +199,23 @@ export default function YearbookPickerPage() {
                   className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition flex items-center justify-center disabled:opacity-50"
                   disabled={loading || !code}
                 >
-                  {loading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : 'Submit'}
+                  {loading ? (
+                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                  ) : (
+                    'Submit'
+                  )}
                 </button>
                 {/* Simple inline messaging */}
-                {error && <p className="text-red-500 mt-2 flex items-center"><XCircle className="w-4 h-4 mr-1"/> {error}</p>}
-                {success && <p className="text-green-600 mt-2 flex items-center"><CheckCircle className="w-4 h-4 mr-1"/> {success}</p>}
+                {error && (
+                  <p className="text-red-500 mt-2 flex items-center">
+                    <XCircle className="w-4 h-4 mr-1" /> {error}
+                  </p>
+                )}
+                {success && (
+                  <p className="text-green-600 mt-2 flex items-center">
+                    <CheckCircle className="w-4 h-4 mr-1" /> {success}
+                  </p>
+                )}
               </div>
             ) : (
               <div className="w-full aspect-[4/5] relative cursor-pointer ring-2 ring-green-800 rounded-lg">
@@ -242,8 +273,8 @@ export default function YearbookPickerPage() {
                           <CheckCircle className="w-5 h-5 text-green-800" />
                         </div>
                       )}
-                       <p className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs text-center p-1 rounded-b-lg truncate">
-                          {photo.originalName}
+                      <p className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs text-center p-1 rounded-b-lg truncate">
+                        {photo.originalName}
                       </p>
                     </div>
                   );
@@ -258,12 +289,24 @@ export default function YearbookPickerPage() {
                 className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold transition-all duration-150 active:shadow-inner active:bg-green-900 flex items-center justify-center disabled:opacity-50"
                 disabled={!selected || loading}
               >
-                {loading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : 'Confirm'}
+                {loading ? (
+                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                ) : (
+                  'Confirm'
+                )}
               </button>
             </div>
             {/* Simple inline messaging for confirmation step */}
-            {error && <p className="text-red-500 mt-2 flex items-center"><XCircle className="w-4 h-4 mr-1"/> {error}</p>}
-            {success && <p className="text-green-600 mt-2 flex items-center"><CheckCircle className="w-4 h-4 mr-1"/> {success}</p>}
+            {error && (
+              <p className="text-red-500 mt-2 flex items-center">
+                <XCircle className="w-4 h-4 mr-1" /> {error}
+              </p>
+            )}
+            {success && (
+              <p className="text-green-600 mt-2 flex items-center">
+                <CheckCircle className="w-4 h-4 mr-1" /> {success}
+              </p>
+            )}
           </div>
         )}
       </div>
