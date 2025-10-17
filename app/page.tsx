@@ -167,7 +167,7 @@ export default function YearbookPickerPage() {
             <div
               className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm overflow-y-auto"
               style={{
-                maxHeight: 'calc((100% / 3 * 5 / 4) * 2 + 0.75rem)', // 2 rows + 1 gap (gap-3 = 0.75rem)
+                maxHeight: 'calc((100vw/3*5/4*2) + 1rem)', // 2 rows + 1 gap (gap-3 = 0.75rem)
               }}
             >
               <h3 className="font-bold text-green-800 text-lg mb-3">
