@@ -194,18 +194,17 @@ export default function YearbookPickerPage() {
               <h3 className="font-bold text-green-800 text-lg mb-3">
                 Photo Gallery
               </h3>
-              {/* Scroll wrapper only if more than 6 photos */}
               <div
                 className={`${
                   photos.length > 6
-                    ? 'overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-green-800 scrollbar-track-gray-200 scroll-smooth rounded-lg'
+                    ? 'overflow-y-auto pr-3 scroll-smooth scrollbar-thumb-rounded-full scrollbar-thin scrollbar-thumb-green-800 scrollbar-track-gray-200'
                     : ''
                 }`}
                 style={{
                   maxHeight:
                     photos.length > 6
                       ? galleryHeight
-                        ? galleryHeight - 32
+                        ? galleryHeight - 8 // subtract padding for exact 2 rows
                         : 448
                       : 'auto',
                 }}
