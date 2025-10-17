@@ -150,6 +150,15 @@ export default function YearbookPickerPage() {
           backgroundColor: 'white',
         }}
       >
+        <div className="w-full text-center mb-6">
+          <h2 className="font-extrabold text-2xl md:text-3xl text-green-800">
+            Tino Ley Digital Photography
+          </h2>
+          <p className="text-lg md:text-xl font-bold text-gray-700">
+            International School Manila SY2025-2026
+          </p>
+        </div>
+
         {/* Left Column */}
         <div className="flex-1 flex flex-col justify-center md:justify-start items-center md:items-start">
           <h1 className="font-extrabold text-center mx-auto md:mx-0 text-2xl md:text-3xl mb-6 text-green-800">
