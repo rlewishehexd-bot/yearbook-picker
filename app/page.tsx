@@ -133,7 +133,7 @@ export default function YearbookPickerPage() {
       {/* Main two-column layout */}
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* LEFT COLUMN */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 order-1">
           <h2 className="font-extrabold text-green-800 text-xl md:text-2xl">
             Yearbook Photo Selection Tool
           </h2>
@@ -162,8 +162,8 @@ export default function YearbookPickerPage() {
             </div>
           )}
 
-          {/* CHOSEN PHOTO SECTION */}
-          <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
+          {/* CHOSEN PHOTO (on mobile, shown after gallery) */}
+          <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center order-5 md:order-3">
             {student ? (
               <>
                 <h3 className="font-bold text-green-800 text-lg mb-2">
@@ -228,9 +228,9 @@ export default function YearbookPickerPage() {
 
         {/* RIGHT COLUMN */}
         {student && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 order-3 md:order-2">
             {/* PHOTO GALLERY */}
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col flex-grow min-h-[300px] max-h-[600px] overflow-y-auto">
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col flex-grow min-h-[300px] max-h-[600px] overflow-y-auto order-4 md:order-2">
               <h3 className="font-bold text-green-800 text-lg mb-3">
                 Photo Gallery
               </h3>
@@ -263,7 +263,7 @@ export default function YearbookPickerPage() {
             </div>
 
             {/* CONFIRM SECTION */}
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center order-6 md:order-4">
               <p className="text-gray-700 font-semibold mb-3 text-center">
                 Your photo package comes with one photo for editing and
                 printing.
