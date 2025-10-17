@@ -290,7 +290,7 @@ export default function YearbookPickerPage() {
 
             {/* Confirm Button */}
             <div className="bg-white rounded-2xl flex flex-col items-center justify-center p-6 border-2 border-green-800 shadow">
-              <p className="text-gray-700 font-semibold">
+              <p className="text-gray-700 font- mb-3">
                 Your photo package comes with one photo for editing and
                 printing.
               </p>
