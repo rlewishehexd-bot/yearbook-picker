@@ -176,7 +176,7 @@ export default function YearbookPickerPage() {
             {/* Selected Photo / Enter Code */}
             <div className="bg-white rounded-2xl flex flex-col items-center w-full relative p-3 border-2 border-green-800 shadow">
               {student && (
-                <h2 className="font-bold mb-3 text-green-800 text-lg md:text-xl md:mx-0 mx-auto w-full">
+                <h2 className="font-bold mb-3 text-green-800 text-lg md:text-xl md:mx-0 text-center p-1">
                   Chosen Photo
                 </h2>
               )}
@@ -246,8 +246,8 @@ export default function YearbookPickerPage() {
           {student && (
             <div className="flex-1 flex flex-col gap-6">
               {/* Photo Gallery */}
-              <div className="bg-white rounded-2xl flex flex-col p-4 border-2 border-green-800 shadow">
-                <h2 className="font-bold mb-3 text-green-800 text-lg">
+              <div className="bg-white rounded-2xl flex flex-col p-3 border-2 border-green-800 shadow">
+                <h2 className="font-bold mb-3 text-green-800 text-center p-1">
                   Photo Gallery
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3 place-items-center">
