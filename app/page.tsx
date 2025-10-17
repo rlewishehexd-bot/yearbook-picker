@@ -165,7 +165,7 @@ export default function YearbookPickerPage() {
                   {student.firstName} {student.lastName}
                 </span>
               </p>
-              <p className="text-base font-semibold text-green-800 mb-2">
+              <p className="text-base font-bold border-2 border-green-800 text-red-800 mb-2">
                 Don&apos;t forget to submit your chosen photo, order form, and
                 payment by your department&apos;s deadline!
               </p>
