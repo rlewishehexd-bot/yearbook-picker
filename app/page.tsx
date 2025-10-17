@@ -19,6 +19,7 @@ type Photo = {
   timestamp: Timestamp;
   originalName: string;
 };
+
 type Student = {
   firstName: string;
   lastName: string;
@@ -63,12 +64,14 @@ export default function YearbookPickerPage() {
       setStudentDocId(docId);
       const studentData = studentSnap.data() as Student;
       setStudent(studentData);
+
       const photosCol = collection(studentSnap.ref, 'photos');
       const photosSnap = await getDocs(photosCol);
       const photosList: Photo[] = photosSnap.docs
         .map((doc) => doc.data() as Photo)
         .sort((a, b) => a.timestamp.seconds - b.timestamp.seconds);
       setPhotos(photosList);
+
       if (studentData.hasChosen && studentData.chosenPhotoUrl) {
         setSelected(studentData.chosenPhotoUrl);
       } else if (photosList.length > 0) {
@@ -116,19 +119,20 @@ export default function YearbookPickerPage() {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col items-center overflow-hidden bg-gradient-to-b from-white to-zinc-50 p-6">
+    <div className="w-screen h-screen flex flex-col items-center overflow-hidden bg-gradient-to-b from-white to-zinc-50 p-3">
       <div
-        className="flex flex-col w-full p-3"
+        className="flex flex-col w-full"
         style={{
           maxWidth: '1200px',
           gap: '24px',
           borderRadius: '1rem',
           backgroundColor: 'white',
           height: '100%',
+          overflow: 'hidden',
         }}
       >
-        {/* Header */}
-        <div className="w-full text-center pb-4 shrink-0">
+        {/* HEADER */}
+        <div className="w-full text-center pb-2 shrink-0">
           <h1 className="font-extrabold text-2xl md:text-3xl text-green-800">
             Tino Ley Digital Photography
           </h1>
@@ -137,47 +141,52 @@ export default function YearbookPickerPage() {
           </p>
         </div>
 
-        {/* Main layout */}
+        {/* MAIN CONTENT */}
         <div
           className="flex flex-col md:flex-row flex-1 overflow-hidden"
           style={{ gap: '24px' }}
         >
-          {/* Left Column */}
-          <div className="flex-1 flex flex-col justify-between items-center md:items-start p-2 min-h-0">
-            <div className="w-full flex flex-col items-center md:items-start">
-              <h2 className="font-extrabold text-center mx-auto md:mx-0 text-2x1 md:text-2xl mb-4 text-green-800">
-                Yearbook Photo Selection Tool
-              </h2>
+          {/* LEFT COLUMN */}
+          <div className="flex-1 flex flex-col justify-start items-center md:items-start p-2 min-h-0">
+            <h2 className="font-extrabold text-center mx-auto md:mx-0 text-2x1 md:text-2xl mb-4 text-green-800">
+              Yearbook Photo Selection Tool
+            </h2>
 
-              {student && (
-                <div className="text-gray-700 mb-4 w-full border-2 rounded-2xl p-5 border-green-800">
-                  <p className="text-lg font-medium mb-1">
-                    Welcome,{' '}
-                    <span className="font-bold text-green-800">
-                      {student.firstName} {student.lastName}
-                    </span>
-                  </p>
-                  <p className="text-base font-semibold text-red-600 mb-2">
-                    Don&apos;t forget to submit your chosen photo, order form,
-                    and payment by your department&apos;s deadline!
-                  </p>
-                  <ul className="list-disc list-inside text-sm font-medium ml-4">
-                    <li>ES: October 24</li>
-                    <li className="line-through text-red-600">
-                      MS: October 10
-                    </li>
-                    <li className="line-through text-red-600">
-                      HS Undergrad: October 10
-                    </li>
-                    <li>Seniors: October 18</li>
-                  </ul>
-                </div>
-              )}
-            </div>
+            {student && (
+              <div className="text-gray-700 mb-4 w-full border-2 rounded-2xl p-4 border-green-800">
+                <p className="text-lg font-medium mb-1">
+                  Welcome,{' '}
+                  <span className="font-bold text-green-800">
+                    {student.firstName} {student.lastName}
+                  </span>
+                </p>
+                <p className="text-base font-semibold text-red-600 mb-2">
+                  Don&apos;t forget to submit your chosen photo, order form, and
+                  payment by your department&apos;s deadline!
+                </p>
+                <ul className="list-disc list-inside text-sm font-medium ml-4">
+                  <li>ES: October 24</li>
+                  <li className="line-through text-red-600">MS: October 10</li>
+                  <li className="line-through text-red-600">
+                    HS Undergrad: October 10
+                  </li>
+                  <li>Seniors: October 18</li>
+                </ul>
+              </div>
+            )}
 
-            <div className="bg-white rounded-2xl flex flex-col items-center w-full relative p-3 border-2 border-green-800 shadow shrink-0">
+            {/* CHOSEN PHOTO OR CODE INPUT */}
+            <div
+              className="bg-white rounded-2xl flex flex-col items-center w-full relative p-3 border-2 border-green-800 shadow"
+              style={{
+                flexShrink: 0,
+                flexGrow: 0,
+                flexBasis: 'auto',
+                maxHeight: 'calc(100vh - 340px)',
+              }}
+            >
               {student && (
-                <h3 className="font-bold mb-3 text-green-800 text-lg md:text-xl text-center p-1">
+                <h3 className="font-bold mb-3 text-green-800 text-lg md:text-xl text-center">
                   Chosen Photo
                 </h3>
               )}
@@ -219,20 +228,27 @@ export default function YearbookPickerPage() {
                   )}
                 </div>
               ) : (
-                <div className="w-full aspect-[4/5] relative ring-2 ring-green-800 rounded-lg overflow-hidden">
+                <div
+                  className="w-full relative ring-2 ring-green-800 rounded-lg overflow-hidden"
+                  style={{
+                    aspectRatio: '4 / 5',
+                    maxHeight: '60vh',
+                    maxWidth: '100%',
+                  }}
+                >
                   {selected ? (
-                    <>
+                    <div className="relative w-full h-full">
                       <Image
                         src={selected}
                         alt="Selected photo"
                         fill
-                        style={{ objectFit: 'cover' }}
+                        style={{ objectFit: 'cover', borderRadius: '0.5rem' }}
                         priority
                       />
                       <div className="absolute top-1 right-1 rounded-full p-1 bg-white flex items-center justify-center">
                         <CheckCircle className="w-6 h-6 text-green-800" />
                       </div>
-                    </>
+                    </div>
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-center text-green-700">
                       No Photo Selected
@@ -243,10 +259,11 @@ export default function YearbookPickerPage() {
             </div>
           </div>
 
-          {/* Right Column */}
+          {/* RIGHT COLUMN */}
           {student && (
-            <div className="flex-1 flex flex-col gap-6 overflow-auto p-2">
-              <div className="bg-white rounded-2xl flex flex-col p-3 border-2 border-green-800 shadow">
+            <div className="flex-1 flex flex-col gap-6 overflow-hidden p-2">
+              {/* GALLERY */}
+              <div className="bg-white rounded-2xl flex flex-col p-3 border-2 border-green-800 shadow flex-grow overflow-hidden">
                 <h3 className="font-bold mb-3 text-2x1 text-green-800 p-1">
                   Photo Gallery
                 </h3>
@@ -287,7 +304,8 @@ export default function YearbookPickerPage() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl flex flex-col items-center justify-center p-6 border-2 border-green-800 shadow">
+              {/* CONFIRM BUTTON */}
+              <div className="bg-white rounded-2xl flex flex-col items-center justify-center p-6 border-2 border-green-800 shadow shrink-0">
                 <p className="text-gray-700 font-semibold mb-3">
                   Your photo package comes with one photo for editing and
                   printing.
@@ -319,6 +337,20 @@ export default function YearbookPickerPage() {
           )}
         </div>
       </div>
+
+      {/* Responsive photo resizing */}
+      <style jsx global>{`
+        @media (max-width: 900px) {
+          .chosen-photo {
+            max-height: 45vh !important;
+          }
+        }
+        @media (max-width: 600px) {
+          .chosen-photo {
+            max-height: 40vh !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
