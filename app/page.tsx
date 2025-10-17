@@ -153,11 +153,7 @@ export default function YearbookPickerPage() {
         {/* Left Column */}
         <div className="flex-1 flex flex-col justify-center md:justify-start items-center md:items-start">
           <h1 className="font-extrabold text-center mx-auto md:mx-0 text-2xl md:text-3xl mb-6 text-green-800">
-            <a href="https://www.yearbook-picker.vercel.app">
-              Tino Ley Digital Photography<br></br>
-              International School Manila SY2025-2026<br></br>
-              Yearbook Photo Selection Tool
-            </a>
+            Yearbook Photo Selection Tool
           </h1>
 
           {/* Student Welcome */}
