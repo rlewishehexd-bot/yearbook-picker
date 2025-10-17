@@ -121,7 +121,7 @@ export default function YearbookPickerPage() {
     }
   };
   return (
-    <div className="w-screen min-h-screen flex flex-col items-center bg-gradient-to-b from-white to-zinc-50 p-6">
+    <div className="w-screen h-screen flex flex-col items-center overflow-hidden bg-gradient-to-b from-white to-zinc-50 p-6">
       <div
         className="flex flex-col w-full p-4"
         style={{
@@ -129,6 +129,7 @@ export default function YearbookPickerPage() {
           gap: '24px',
           borderRadius: '1rem',
           backgroundColor: 'white',
+          height: '100%',
         }}
       >
         {/* NEW 1-COLUMN HEADER ROW: Tino Ley Digital Photography / School Year */}
@@ -250,7 +251,13 @@ export default function YearbookPickerPage() {
                 <h3 className="font-bold mb-3 text-2x1 text-green-800 p-1">
                   Photo Gallery
                 </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3 place-items-center">
+                <div
+                  className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3 place-items-center overflow-y-auto"
+                  style={{
+                    maxHeight: '420px', // ✅ fits 6 photos (2 rows of ~210px each)
+                    paddingRight: '4px', // ✅ avoids scrollbar overlap
+                  }}
+                >
                   {photos.map((photo) => {
                     const isSelected = selected === photo.url;
                     return (
