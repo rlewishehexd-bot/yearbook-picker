@@ -42,15 +42,15 @@ export default function YearbookPickerPage() {
   const galleryRef = useRef<HTMLDivElement>(null);
   const [galleryHeight, setGalleryHeight] = useState<number>(0);
 
-  // Dynamically calculate gallery height for exactly 2 rows
+  // Calculate gallery height for exactly 2 rows
   useEffect(() => {
     const calculateHeight = () => {
       if (!galleryRef.current) return;
       const containerWidth = galleryRef.current.clientWidth;
       const columns = window.innerWidth >= 640 ? 3 : 2; // sm breakpoint
-      const gap = 12; // Tailwind gap-3 = 0.75rem = 12px
+      const gap = 12; // Tailwind gap-3 = 0.75rem
       const cardWidth = (containerWidth - gap * (columns - 1)) / columns;
-      const cardHeight = (cardWidth * 5) / 4; // aspect ratio 4:5
+      const cardHeight = (cardWidth * 5) / 4; // 4:5 aspect ratio
       const rows = 2;
       const totalHeight = cardHeight * rows + gap * (rows - 1);
       setGalleryHeight(totalHeight);
@@ -188,9 +188,9 @@ export default function YearbookPickerPage() {
           {student && (
             <div
               ref={galleryRef}
-              className={`border-2 border-green-800 rounded-2xl p-4 pr-6 bg-white shadow-sm overflow-y-auto`}
+              className="border-2 border-green-800 rounded-2xl p-4 pr-6 bg-white shadow-sm overflow-y-auto"
               style={{
-                maxHeight: galleryHeight || 480, // fixed height for 2 rows
+                maxHeight: galleryHeight || 480,
               }}
             >
               <h3 className="font-bold text-green-800 text-lg mb-3">
