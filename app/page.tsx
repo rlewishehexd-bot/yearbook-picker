@@ -119,9 +119,9 @@ export default function YearbookPickerPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6">
+    <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6 flex flex-col">
       {/* HEADER */}
-      <header className="text-center mb-6 order-1">
+      <header className="text-center mb-6 flex-shrink-0">
         <h1 className="font-extrabold text-2xl md:text-3xl text-green-800">
           Tino Ley Digital Photography
         </h1>
@@ -131,9 +131,9 @@ export default function YearbookPickerPage() {
       </header>
 
       {/* MAIN GRID */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="flex-1 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* LEFT COLUMN */}
-        <div className="flex flex-col gap-4 order-1 md:order-1">
+        <div className="flex flex-col gap-4">
           <h2 className="font-extrabold text-green-800 text-xl md:text-2xl">
             Yearbook Photo Selection Tool
           </h2>
@@ -164,12 +164,7 @@ export default function YearbookPickerPage() {
 
           {/* PHOTO GALLERY */}
           {student && (
-            <div
-              className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm overflow-y-auto"
-              style={{
-                maxHeight: 'calc((100vw / 3) * 4/5 * 2 + 100px)', // scrolls after 2 rows of 3
-              }}
-            >
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex-1 overflow-y-auto">
               <h3 className="font-bold text-green-800 text-lg mb-3">
                 Photo Gallery
               </h3>
@@ -202,7 +197,7 @@ export default function YearbookPickerPage() {
             </div>
           )}
 
-          {/* LOGIN / CODE INPUT (if not student) */}
+          {/* LOGIN / CODE INPUT */}
           {!student && (
             <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
               <input
@@ -222,9 +217,9 @@ export default function YearbookPickerPage() {
                 className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50"
                 disabled={loading || !code}
               >
-                {loading ? (
+                {loading && (
                   <Loader2 className="w-5 h-5 animate-spin inline-block mr-2" />
-                ) : null}
+                )}
                 Submit
               </button>
               {error && (
@@ -243,7 +238,7 @@ export default function YearbookPickerPage() {
 
         {/* RIGHT COLUMN */}
         {student && (
-          <div className="flex flex-col gap-4 order-2">
+          <div className="flex flex-col gap-4">
             {/* CHOSEN PHOTO */}
             <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
               <h3 className="font-bold text-green-800 text-lg mb-2">
@@ -279,9 +274,7 @@ export default function YearbookPickerPage() {
                 className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
                 disabled={!selected || loading}
               >
-                {loading ? (
-                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                ) : null}
+                {loading && <Loader2 className="w-5 h-5 animate-spin mr-2" />}
                 Set as Chosen Photo
               </button>
               {success && (
