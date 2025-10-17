@@ -172,6 +172,13 @@ export default function YearbookPickerPage() {
                 </ul>
               </div>
             )}
+
+            {student && (
+              <h2 className="font-bold mb-3 text-green-800 text-lg md:text-xl md:mx-0 mx-auto">
+                Chosen Photo
+              </h2>
+            )}
+
             {/* Selected Photo / Enter Code */}
             <div className="bg-white rounded-2xl flex flex-col items-center w-full relative p-6 border-2 border-green-800 shadow">
               {!student ? (
@@ -287,7 +294,7 @@ export default function YearbookPickerPage() {
                   {loading ? (
                     <Loader2 className="w-5 h-5 animate-spin mr-2" />
                   ) : (
-                    'Set as Final Photo'
+                    'Set as Chosen Photo'
                   )}
                 </button>
               </div>
