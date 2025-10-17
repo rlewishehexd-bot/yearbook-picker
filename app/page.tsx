@@ -167,14 +167,18 @@ export default function YearbookPickerPage() {
                   {student.firstName} {student.lastName}
                 </span>
               </p>
-              <p className="text-base font-semibold  text-red-800 mb-2">
+              <p className="text-base font-semibold  text-red-600 mb-2">
                 Don&apos;t forget to submit your chosen photo, order form, and
                 payment by your department&apos;s deadline!
               </p>
               <ul className="list-disc list-inside text-sm font-medium ml-4">
                 <li className="mb-0.5">ES: October 24</li>
-                <li className="mb-0.5 line-through text-red-800">MS: October 10</li>
-                <li className="mb-0.5 line-through text-red-800">HS Undergrad: October 10</li>
+                <li className="mb-0.5 line-through text-red-600">
+                  MS: October 10
+                </li>
+                <li className="mb-0.5 line-through text-red-600">
+                  HS Undergrad: October 10
+                </li>
                 <li className="mb-0.5">Seniors: October 18</li>
               </ul>
             </div>
@@ -285,8 +289,8 @@ export default function YearbookPickerPage() {
             </div>
 
             {/* Confirm Button */}
-            <div className="bg-white rounded-2xl flex flex-col items-center justify-center p-4 border-2 border-green-800 shadow">
-              <p className="font-semibold">
+            <div className="bg-white rounded-2xl flex flex-col items-center justify-center p-6 border-2 border-green-800 shadow">
+              <p className="text-gray-700 font-semibold">
                 Your photo package comes with one photo for editing and
                 printing.
               </p>
