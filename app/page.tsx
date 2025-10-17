@@ -121,7 +121,7 @@ export default function YearbookPickerPage() {
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6">
       {/* HEADER */}
-      <header className="text-center mb-6">
+      <header className="text-center mb-6 order-1">
         <h1 className="font-extrabold text-2xl md:text-3xl text-green-800">
           Tino Ley Digital Photography
         </h1>
@@ -133,7 +133,7 @@ export default function YearbookPickerPage() {
       {/* MAIN GRID */}
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* LEFT COLUMN */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 order-1 md:order-1">
           <h2 className="font-extrabold text-green-800 text-xl md:text-2xl">
             Yearbook Photo Selection Tool
           </h2>
@@ -164,14 +164,16 @@ export default function YearbookPickerPage() {
 
           {/* PHOTO GALLERY */}
           {student && (
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col">
-              <h3 className="font-bold text-green-800 text-lg mb-3 text-center">
+            <div
+              className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm overflow-y-auto"
+              style={{
+                maxHeight: 'calc((100vw / 3) * 4/5 * 2 + 100px)', // scrolls after 2 rows of 3
+              }}
+            >
+              <h3 className="font-bold text-green-800 text-lg mb-3">
                 Photo Gallery
               </h3>
-              <div
-                className="grid grid-cols-2 sm:grid-cols-3 gap-3 overflow-y-auto pr-2"
-                style={{ maxHeight: '480px' }}
-              >
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {photos.map((photo) => {
                   const isSelected = selected === photo.url;
                   return (
@@ -200,8 +202,9 @@ export default function YearbookPickerPage() {
             </div>
           )}
 
+          {/* LOGIN / CODE INPUT (if not student) */}
           {!student && (
-            <div className="flex flex-col items-center justify-center py-10">
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
               <input
                 type="text"
                 placeholder="Enter your code"
@@ -229,13 +232,18 @@ export default function YearbookPickerPage() {
                   <XCircle className="w-4 h-4 mr-1" /> {error}
                 </p>
               )}
+              {success && (
+                <p className="text-green-600 mt-2 flex items-center text-sm">
+                  <CheckCircle className="w-4 h-4 mr-1" /> {success}
+                </p>
+              )}
             </div>
           )}
         </div>
 
         {/* RIGHT COLUMN */}
         {student && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 order-2">
             {/* CHOSEN PHOTO */}
             <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
               <h3 className="font-bold text-green-800 text-lg mb-2">
