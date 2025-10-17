@@ -286,6 +286,11 @@ export default function YearbookPickerPage() {
 
             {/* Confirm Button */}
             <div className="bg-white rounded-2xl flex flex-col items-center justify-center p-4 border-2 border-green-800 shadow">
+              <p>
+                Your photo package comes with one photo for editing and
+                printing.
+              </p>
+
               <button
                 onClick={handleConfirm}
                 className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold transition-all duration-150 active:shadow-inner active:bg-green-900 flex items-center justify-center disabled:opacity-50"
@@ -294,7 +299,7 @@ export default function YearbookPickerPage() {
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin mr-2" />
                 ) : (
-                  'Confirm'
+                  'Set as Final Photo'
                 )}
               </button>
             </div>
