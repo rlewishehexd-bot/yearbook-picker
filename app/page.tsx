@@ -119,7 +119,7 @@ export default function YearbookPickerPage() {
   };
 
   return (
-    <div className="h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6 overflow-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6">
       {/* HEADER */}
       <header className="text-center mb-6">
         <h1 className="font-extrabold text-2xl md:text-3xl text-green-800">
@@ -131,16 +131,16 @@ export default function YearbookPickerPage() {
       </header>
 
       {/* MAIN GRID */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 h-[calc(100vh-160px)]">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* LEFT COLUMN */}
-        <div className="flex flex-col gap-4 overflow-hidden">
+        <div className="flex flex-col gap-4">
           <h2 className="font-extrabold text-green-800 text-xl md:text-2xl">
             Yearbook Photo Selection Tool
           </h2>
 
           {/* WELCOME SECTION */}
           {student && (
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex-shrink-0">
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm">
               <p className="text-lg">
                 Welcome,{' '}
                 <span className="font-bold text-green-800">
@@ -162,13 +162,13 @@ export default function YearbookPickerPage() {
             </div>
           )}
 
-          {/* PHOTO GALLERY (INTERNAL SCROLL) */}
+          {/* PHOTO GALLERY */}
           {student && (
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col flex-grow max-w-[90%] mx-auto max-h-[500px] overflow-y-auto">
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm max-w-[95%] self-center">
               <h3 className="font-bold text-green-800 text-lg mb-3 text-center">
                 Photo Gallery
               </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[400px] overflow-y-auto">
                 {photos.map((photo) => {
                   const isSelected = selected === photo.url;
                   return (
@@ -198,7 +198,7 @@ export default function YearbookPickerPage() {
           )}
 
           {!student && (
-            <div className="flex flex-col items-center justify-center flex-grow">
+            <div className="flex flex-col items-center justify-center py-10">
               <input
                 type="text"
                 placeholder="Enter your code"
@@ -232,9 +232,9 @@ export default function YearbookPickerPage() {
 
         {/* RIGHT COLUMN */}
         {student && (
-          <div className="flex flex-col gap-4 overflow-hidden">
+          <div className="flex flex-col gap-4">
             {/* CHOSEN PHOTO */}
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center flex-shrink-0">
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
               <h3 className="font-bold text-green-800 text-lg mb-2">
                 Chosen Photo
               </h3>
@@ -258,7 +258,7 @@ export default function YearbookPickerPage() {
             </div>
 
             {/* CONFIRM SECTION */}
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center justify-center flex-grow">
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center justify-center">
               <p className="text-gray-700 font-semibold mb-3 text-center">
                 Your photo package comes with one photo for editing and
                 printing.
