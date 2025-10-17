@@ -100,10 +100,10 @@ export default function YearbookPickerPage() {
         choiceTimestamp: serverTimestamp(),
       });
       setSuccess('Photo confirmed!');
-      setStudent((prevStudent) =>
-        prevStudent
+      setStudent((prev) =>
+        prev
           ? {
-              ...prevStudent,
+              ...prev,
               chosenPhotoUrl: selected,
               chosenPhotoName: chosenPhoto?.originalName ?? null,
               hasChosen: true,
@@ -121,7 +121,7 @@ export default function YearbookPickerPage() {
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6">
       {/* HEADER */}
-      <header className="text-center mb-6 order-1">
+      <header className="text-center mb-6">
         <h1 className="font-extrabold text-2xl md:text-3xl text-green-800">
           Tino Ley Digital Photography
         </h1>
@@ -132,15 +132,15 @@ export default function YearbookPickerPage() {
 
       {/* MAIN GRID */}
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* LEFT COLUMN */}
+        {/* LEFT COLUMN (Welcome section) */}
         <div className="flex flex-col gap-4 order-1 md:order-1">
-          <h2 className="font-extrabold text-green-800 text-xl md:text-2xl order-2">
+          <h2 className="font-extrabold text-green-800 text-xl md:text-2xl">
             Yearbook Photo Selection Tool
           </h2>
 
           {/* WELCOME SECTION */}
           {student && (
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm order-3">
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm">
               <p className="text-lg">
                 Welcome,{' '}
                 <span className="font-bold text-green-800">
@@ -161,9 +161,72 @@ export default function YearbookPickerPage() {
               </ul>
             </div>
           )}
+        </div>
 
-          {/* CHOSEN PHOTO */}
-          <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center order-5 md:order-4">
+        {/* RIGHT COLUMN (Gallery + Confirm) */}
+        {student && (
+          <div className="flex flex-col gap-4 order-2 md:order-2">
+            {/* PHOTO GALLERY */}
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col flex-grow min-h-[300px] max-h-[600px] overflow-y-auto order-2 md:order-2">
+              <h3 className="font-bold text-green-800 text-lg mb-3">
+                Photo Gallery
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {photos.map((photo) => {
+                  const isSelected = selected === photo.url;
+                  return (
+                    <div
+                      key={photo.url}
+                      className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-green-800 ${
+                        isSelected ? 'ring-offset-2' : 'hover:ring-green-800'
+                      } transition-all`}
+                      onClick={() => setSelected(photo.url)}
+                    >
+                      <Image
+                        src={photo.url}
+                        alt="photo"
+                        fill
+                        style={{ objectFit: 'cover', borderRadius: '0.5rem' }}
+                      />
+                      {isSelected && (
+                        <div className="absolute top-1 right-1 bg-white rounded-full p-1">
+                          <CheckCircle className="w-5 h-5 text-green-800" />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* CONFIRM SECTION */}
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center order-4 md:order-5">
+              <p className="text-gray-700 font-semibold mb-3 text-center">
+                Your photo package comes with one photo for editing and
+                printing.
+              </p>
+              <button
+                onClick={handleConfirm}
+                className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
+                disabled={!selected || loading}
+              >
+                {loading ? (
+                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                ) : null}
+                Set as Chosen Photo
+              </button>
+              {success && (
+                <p className="text-green-600 mt-2 flex items-center text-sm">
+                  <CheckCircle className="w-4 h-4 mr-1" /> {success}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* CHOSEN PHOTO – separate block for proper responsive ordering */}
+        <div className="order-3 md:col-start-1 md:row-start-2 md:order-1">
+          <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
             {student ? (
               <>
                 <h3 className="font-bold text-green-800 text-lg mb-2">
@@ -225,67 +288,6 @@ export default function YearbookPickerPage() {
             )}
           </div>
         </div>
-
-        {/* RIGHT COLUMN */}
-        {student && (
-          <div className="flex flex-col gap-4 order-3 md:order-2">
-            {/* PHOTO GALLERY */}
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col flex-grow min-h-[300px] max-h-[600px] overflow-y-auto order-4 md:order-2">
-              <h3 className="font-bold text-green-800 text-lg mb-3">
-                Photo Gallery
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {photos.map((photo) => {
-                  const isSelected = selected === photo.url;
-                  return (
-                    <div
-                      key={photo.url}
-                      className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-green-800 ${
-                        isSelected ? 'ring-offset-2' : 'hover:ring-green-800'
-                      } transition-all`}
-                      onClick={() => setSelected(photo.url)}
-                    >
-                      <Image
-                        src={photo.url}
-                        alt="photo"
-                        fill
-                        style={{ objectFit: 'cover', borderRadius: '0.5rem' }}
-                      />
-                      {isSelected && (
-                        <div className="absolute top-1 right-1 bg-white rounded-full p-1">
-                          <CheckCircle className="w-5 h-5 text-green-800" />
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* CONFIRM SECTION */}
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center order-6 md:order-5">
-              <p className="text-gray-700 font-semibold mb-3 text-center">
-                Your photo package comes with one photo for editing and
-                printing.
-              </p>
-              <button
-                onClick={handleConfirm}
-                className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
-                disabled={!selected || loading}
-              >
-                {loading ? (
-                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                ) : null}
-                Set as Chosen Photo
-              </button>
-              {success && (
-                <p className="text-green-600 mt-2 flex items-center text-sm">
-                  <CheckCircle className="w-4 h-4 mr-1" /> {success}
-                </p>
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
