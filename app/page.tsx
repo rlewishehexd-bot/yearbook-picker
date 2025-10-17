@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { db } from '../lib/firebaseClient';
 import {
   doc,
@@ -38,6 +38,28 @@ export default function YearbookPickerPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const [galleryHeight, setGalleryHeight] = useState<number>(0);
+
+  // Dynamically calculate gallery height based on card width
+  useEffect(() => {
+    const calculateHeight = () => {
+      if (!galleryRef.current) return;
+      const containerWidth = galleryRef.current.clientWidth;
+      const columns = window.innerWidth >= 640 ? 3 : 2; // sm breakpoint
+      const gap = 12; // Tailwind gap-3 = 0.75rem = 12px
+      const cardWidth = (containerWidth - gap * (columns - 1)) / columns;
+      const cardHeight = (cardWidth * 5) / 4; // aspect ratio 4:5
+      const rows = 2;
+      const totalHeight = cardHeight * rows + gap * (rows - 1);
+      setGalleryHeight(totalHeight);
+    };
+
+    calculateHeight();
+    window.addEventListener('resize', calculateHeight);
+    return () => window.removeEventListener('resize', calculateHeight);
+  }, []);
 
   const fetchStudentData = async () => {
     setError('');
@@ -165,9 +187,14 @@ export default function YearbookPickerPage() {
           {/* PHOTO GALLERY */}
           {student && (
             <div
-              className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm overflow-y-auto"
+              ref={galleryRef}
+              className={`border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm ${
+                photos.length > 6
+                  ? 'overflow-y-auto scrollbar-thin scrollbar-thumb-green-800 scrollbar-track-gray-200 scroll-smooth'
+                  : 'overflow-hidden'
+              }`}
               style={{
-                maxHeight: 'calc((100vw/3*5/4*2) + 1rem)', // 2 rows + 1 gap (gap-3 = 0.75rem)
+                maxHeight: galleryHeight || 480, // fallback to 480px
               }}
             >
               <h3 className="font-bold text-green-800 text-lg mb-3">
