@@ -153,12 +153,14 @@ export default function YearbookPickerPage() {
         {/* Left Column */}
         <div className="flex-1 flex flex-col justify-center md:justify-start items-center md:items-start">
           <h1 className="font-extrabold text-center mx-auto md:mx-0 text-2xl md:text-3xl mb-6 text-green-800">
-            Yearbook Picture Tool
+            <a href="https://www.yearbook-picker.vercel.app">
+              Yearbook Picture Tool
+            </a>
           </h1>
 
           {/* Student Welcome */}
           {student && (
-            <div className="text-gray-700 mb-6 w-full border-2 rounded-2xl border-green-800">
+            <div className="text-gray-700 mb-6 w-full border-2 rounded-2xl p-6 border-green-800">
               <p className="text-lg font-medium mb-1">
                 Welcome,{' '}
                 <span className="font-bold text-green-800">
