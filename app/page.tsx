@@ -173,8 +173,8 @@ export default function YearbookPickerPage() {
               </p>
               <ul className="list-disc list-inside text-sm font-medium ml-4">
                 <li className="mb-0.5">ES: October 24</li>
-                <li className="mb-0.5">MS: October 10</li>
-                <li className="mb-0.5">HS Undergrad: October 10</li>
+                <li className="mb-0.5 line-through text-red-800">MS: October 10</li>
+                <li className="mb-0.5 line-through text-red-800">HS Undergrad: October 10</li>
                 <li className="mb-0.5">Seniors: October 18</li>
               </ul>
             </div>
@@ -286,7 +286,7 @@ export default function YearbookPickerPage() {
 
             {/* Confirm Button */}
             <div className="bg-white rounded-2xl flex flex-col items-center justify-center p-4 border-2 border-green-800 shadow">
-              <p>
+              <p className="font-semibold">
                 Your photo package comes with one photo for editing and
                 printing.
               </p>
