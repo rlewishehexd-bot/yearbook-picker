@@ -152,16 +152,17 @@ export default function YearbookPickerPage() {
         </p>
       </header>
 
-      {/* MAIN GRID */}
-      <div className="flex-1 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* LEFT COLUMN */}
-        <div className="flex flex-col gap-4">
-          <h2 className="font-extrabold text-green-800 text-xl md:text-2xl">
-            Yearbook Photo Selection Tool
-          </h2>
+      {/* MAIN GRID OR CENTERED CODE ENTRY */}
+      {student ? (
+        // SECOND VIEW: yearbook selection
+        <div className="flex-1 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* LEFT COLUMN */}
+          <div className="flex flex-col gap-4">
+            <h2 className="font-extrabold text-green-800 text-xl md:text-2xl">
+              Yearbook Photo Selection Tool
+            </h2>
 
-          {/* WELCOME SECTION */}
-          {student && (
+            {/* WELCOME SECTION */}
             <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm">
               <p className="text-lg">
                 Welcome,{' '}
@@ -182,10 +183,8 @@ export default function YearbookPickerPage() {
                 <li>Seniors: October 18</li>
               </ul>
             </div>
-          )}
 
-          {/* PHOTO GALLERY */}
-          {student && (
+            {/* PHOTO GALLERY */}
             <div
               ref={galleryRef}
               className="border-2 border-green-800 rounded-2xl p-4 pr-6 bg-white shadow-sm overflow-y-auto"
@@ -223,51 +222,9 @@ export default function YearbookPickerPage() {
                 })}
               </div>
             </div>
-          )}
+          </div>
 
-          {/* LOGIN / CODE INPUT */}
-          {!student && (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="border-2 border-green-800 rounded-2xl p-6 bg-white shadow-sm flex flex-col items-center w-full max-w-md">
-                <input
-                  type="text"
-                  placeholder="Enter your code"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  className="border-2 border-green-800 rounded-lg px-3 py-2 w-64 text-center focus:ring-2 focus:ring-green-600 outline-none mb-4"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') fetchStudentData();
-                  }}
-                  autoComplete="off"
-                  disabled={loading}
-                />
-                <button
-                  onClick={fetchStudentData}
-                  className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
-                  disabled={loading || !code}
-                >
-                  {loading && (
-                    <Loader2 className="w-5 h-5 animate-spin inline-block mr-2" />
-                  )}
-                  Submit
-                </button>
-                {error && (
-                  <p className="text-red-500 mt-2 flex items-center text-sm">
-                    <XCircle className="w-4 h-4 mr-1" /> {error}
-                  </p>
-                )}
-                {success && (
-                  <p className="text-green-600 mt-2 flex items-center text-sm">
-                    <CheckCircle className="w-4 h-4 mr-1" /> {success}
-                  </p>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* RIGHT COLUMN */}
-        {student && (
+          {/* RIGHT COLUMN */}
           <div className="flex flex-col gap-4">
             {/* CHOSEN PHOTO */}
             <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
@@ -314,8 +271,47 @@ export default function YearbookPickerPage() {
               )}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        // FIRST VIEW: code entry
+        <div className="flex-1 flex items-center justify-center">
+          <div className="border-2 border-green-800 rounded-2xl p-6 bg-white shadow-sm flex flex-col items-center w-full max-w-md">
+            <h2 className="font-extrabold text-green-800 text-xl md:text-2xl mb-4 text-center">
+              Yearbook Photo Selection Tool
+            </h2>
+            <input
+              type="text"
+              placeholder="Enter your code"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              className="border-2 border-green-800 rounded-lg px-3 py-2 w-64 text-center focus:ring-2 focus:ring-green-600 outline-none mb-4"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') fetchStudentData();
+              }}
+              autoComplete="off"
+              disabled={loading}
+            />
+            <button
+              onClick={fetchStudentData}
+              className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
+              disabled={loading || !code}
+            >
+              {loading && <Loader2 className="w-5 h-5 animate-spin mr-2" />}
+              Submit
+            </button>
+            {error && (
+              <p className="text-red-500 mt-2 flex items-center text-sm">
+                <XCircle className="w-4 h-4 mr-1" /> {error}
+              </p>
+            )}
+            {success && (
+              <p className="text-green-600 mt-2 flex items-center text-sm">
+                <CheckCircle className="w-4 h-4 mr-1" /> {success}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
