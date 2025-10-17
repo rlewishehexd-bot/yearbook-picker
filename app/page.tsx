@@ -121,7 +121,7 @@ export default function YearbookPickerPage() {
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6">
       {/* Header */}
-      <header className="text-center mb-6">
+      <header className="text-center mb-6 order-1">
         <h1 className="font-extrabold text-2xl md:text-3xl text-green-800">
           Tino Ley Digital Photography
         </h1>
@@ -134,13 +134,13 @@ export default function YearbookPickerPage() {
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* LEFT COLUMN */}
         <div className="flex flex-col gap-4 order-1">
-          <h2 className="font-extrabold text-green-800 text-xl md:text-2xl">
+          <h2 className="font-extrabold text-green-800 text-xl md:text-2xl order-2">
             Yearbook Photo Selection Tool
           </h2>
 
           {/* WELCOME SECTION */}
           {student && (
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm">
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm order-3">
               <p className="text-lg">
                 Welcome,{' '}
                 <span className="font-bold text-green-800">
@@ -162,7 +162,7 @@ export default function YearbookPickerPage() {
             </div>
           )}
 
-          {/* CHOSEN PHOTO (on mobile, shown after gallery) */}
+          {/* CHOSEN PHOTO (mobile: after gallery) */}
           <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center order-5 md:order-3">
             {student ? (
               <>
