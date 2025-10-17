@@ -174,9 +174,9 @@ export default function YearbookPickerPage() {
             )}
 
             {/* Selected Photo / Enter Code */}
-            <div className="bg-white rounded-2xl flex flex-col items-center w-full relative p-6 border-2 border-green-800 shadow">
+            <div className="bg-white rounded-2xl flex flex-col items-center w-full relative p-3 border-2 border-green-800 shadow">
               {student && (
-                <h2 className="font-bold mb-3 text-green-800 text-lg md:text-xl md:mx-0 text-left w-full">
+                <h2 className="font-bold mb-3 text-green-800 text-lg md:text-xl md:mx-0 mx-auto w-full">
                   Chosen Photo
                 </h2>
               )}
