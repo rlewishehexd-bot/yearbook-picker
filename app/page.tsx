@@ -41,7 +41,6 @@ export default function YearbookPickerPage() {
 
   const galleryRef = useRef<HTMLDivElement>(null);
   const [galleryHeight, setGalleryHeight] = useState<number>(0);
-  const [galleryScroll, setGalleryScroll] = useState<number>(0);
 
   // Dynamically calculate gallery height based on card width
   useEffect(() => {
@@ -142,7 +141,7 @@ export default function YearbookPickerPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6 flex flex-col">
+    <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6 flex flex-col items-center">
       {/* HEADER */}
       <header className="text-center mb-6 flex-shrink-0">
         <h1 className="font-extrabold text-2xl md:text-3xl text-green-800">
@@ -153,136 +152,115 @@ export default function YearbookPickerPage() {
         </p>
       </header>
 
-      <div className="flex-1 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* LEFT COLUMN */}
-        <div className="flex flex-col gap-4">
-          {/* FIRST VIEW: INPUT BOX */}
-          {!student && (
-            <div className="flex justify-center items-start mt-6">
-              <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center w-full max-w-md">
-                <h2 className="font-extrabold text-green-800 text-xl md:text-2xl mb-3 text-center">
-                  Yearbook Photo Selection Tool
-                </h2>
-                <input
-                  type="text"
-                  placeholder="Enter your code"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  className="border-2 border-green-800 rounded-lg px-3 py-2 w-64 text-center focus:ring-2 focus:ring-green-600 outline-none mb-3"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') fetchStudentData();
-                  }}
-                  autoComplete="off"
-                  disabled={loading}
-                />
-                <button
-                  onClick={fetchStudentData}
-                  className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50"
-                  disabled={loading || !code}
-                >
-                  {loading && (
-                    <Loader2 className="w-5 h-5 animate-spin inline-block mr-2" />
-                  )}
-                  Submit
-                </button>
-                {error && (
-                  <p className="text-red-500 mt-2 flex items-center text-sm">
-                    <XCircle className="w-4 h-4 mr-1" /> {error}
-                  </p>
-                )}
-                {success && (
-                  <p className="text-green-600 mt-2 flex items-center text-sm">
-                    <CheckCircle className="w-4 h-4 mr-1" /> {success}
-                  </p>
-                )}
+      {/* FIRST VIEW: INPUT BOX */}
+      {!student && (
+        <div className="flex justify-center w-full mt-6">
+          <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center w-full max-w-md">
+            <h2 className="font-extrabold text-green-800 text-xl md:text-2xl mb-3 text-center">
+              Yearbook Photo Selection Tool
+            </h2>
+            <input
+              type="text"
+              placeholder="Enter your code"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              className="border-2 border-green-800 rounded-lg px-3 py-2 w-64 text-center focus:ring-2 focus:ring-green-600 outline-none mb-3"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') fetchStudentData();
+              }}
+              autoComplete="off"
+              disabled={loading}
+            />
+            <button
+              onClick={fetchStudentData}
+              className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50"
+              disabled={loading || !code}
+            >
+              {loading && (
+                <Loader2 className="w-5 h-5 animate-spin inline-block mr-2" />
+              )}
+              Submit
+            </button>
+            {error && (
+              <p className="text-red-500 mt-2 flex items-center text-sm">
+                <XCircle className="w-4 h-4 mr-1" /> {error}
+              </p>
+            )}
+            {success && (
+              <p className="text-green-600 mt-2 flex items-center text-sm">
+                <CheckCircle className="w-4 h-4 mr-1" /> {success}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* SECOND VIEW: STUDENT DATA AND GALLERY */}
+      {student && (
+        <div className="flex-1 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+          {/* LEFT COLUMN */}
+          <div className="flex flex-col gap-4">
+            {/* WELCOME SECTION */}
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm">
+              <p className="text-lg">
+                Welcome,{' '}
+                <span className="font-bold text-green-800">
+                  {student.firstName} {student.lastName}
+                </span>
+              </p>
+              <p className="text-sm font-semibold text-red-600 mt-1">
+                Don’t forget to submit your chosen photo, order form, and
+                payment by your department’s deadline!
+              </p>
+              <ul className="list-disc list-inside text-sm mt-2">
+                <li>ES: October 24</li>
+                <li className="line-through text-red-600">MS: October 10</li>
+                <li className="line-through text-red-600">
+                  HS Undergrad: October 10
+                </li>
+                <li>Seniors: October 18</li>
+              </ul>
+            </div>
+
+            {/* PHOTO GALLERY */}
+            <div
+              ref={galleryRef}
+              className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm overflow-y-auto"
+              style={{ maxHeight: galleryHeight || 480 }}
+            >
+              <h3 className="font-bold text-green-800 text-lg mb-3">
+                Photo Gallery
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {photos.map((photo) => {
+                  const isSelected = selected === photo.url;
+                  return (
+                    <div
+                      key={photo.url}
+                      className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-green-800 ${
+                        isSelected ? 'ring-offset-2' : 'hover:ring-green-800'
+                      } transition-all`}
+                      onClick={() => setSelected(photo.url)}
+                    >
+                      <Image
+                        src={photo.url}
+                        alt="photo"
+                        fill
+                        style={{ objectFit: 'cover', borderRadius: '0.5rem' }}
+                      />
+                      {isSelected && (
+                        <div className="absolute top-1 right-1 bg-white rounded-full p-1">
+                          <CheckCircle className="w-5 h-5 text-green-800" />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          )}
+          </div>
 
-          {/* WELCOME & GALLERY */}
-          {student && (
-            <>
-              <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm">
-                <p className="text-lg">
-                  Welcome,{' '}
-                  <span className="font-bold text-green-800">
-                    {student.firstName} {student.lastName}
-                  </span>
-                </p>
-                <p className="text-sm font-semibold text-red-600 mt-1">
-                  Don’t forget to submit your chosen photo, order form, and
-                  payment by your department’s deadline!
-                </p>
-                <ul className="list-disc list-inside text-sm mt-2">
-                  <li>ES: October 24</li>
-                  <li className="line-through text-red-600">MS: October 10</li>
-                  <li className="line-through text-red-600">
-                    HS Undergrad: October 10
-                  </li>
-                  <li>Seniors: October 18</li>
-                </ul>
-              </div>
-
-              {/* PHOTO GALLERY */}
-              <div className="relative">
-                <div
-                  ref={galleryRef}
-                  className="border-2 border-green-800 rounded-2xl p-4 pr-4 bg-white shadow-sm overflow-y-auto"
-                  style={{ maxHeight: galleryHeight || 480 }}
-                  onScroll={(e) =>
-                    setGalleryScroll((e.target as HTMLDivElement).scrollTop)
-                  }
-                >
-                  <h3 className="font-bold text-green-800 text-lg mb-3">
-                    Photo Gallery
-                  </h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {photos.map((photo) => {
-                      const isSelected = selected === photo.url;
-                      return (
-                        <div
-                          key={photo.url}
-                          className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-green-800 ${
-                            isSelected
-                              ? 'ring-offset-2'
-                              : 'hover:ring-green-800'
-                          } transition-all`}
-                          onClick={() => setSelected(photo.url)}
-                        >
-                          <Image
-                            src={photo.url}
-                            alt="photo"
-                            fill
-                            style={{
-                              objectFit: 'cover',
-                              borderRadius: '0.5rem',
-                            }}
-                          />
-                          {isSelected && (
-                            <div className="absolute top-1 right-1 bg-white rounded-full p-1">
-                              <CheckCircle className="w-5 h-5 text-green-800" />
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Scroll hint gradients */}
-                {photos.length > 6 && (
-                  <>
-                    <div className="pointer-events-none absolute top-0 left-0 w-full h-8 bg-gradient-to-b from-white/60 to-white rounded-t-2xl"></div>
-                    <div className="pointer-events-none absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-white/60 to-white rounded-b-2xl"></div>
-                  </>
-                )}
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* RIGHT COLUMN */}
-        {student && (
+          {/* RIGHT COLUMN */}
           <div className="flex flex-col gap-4">
             {/* CHOSEN PHOTO */}
             <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
@@ -329,8 +307,8 @@ export default function YearbookPickerPage() {
               )}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
