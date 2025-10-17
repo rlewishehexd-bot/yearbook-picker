@@ -131,16 +131,16 @@ export default function YearbookPickerPage() {
       </header>
 
       {/* MAIN GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 flex-grow max-h-[calc(100vh-110px)] overflow-hidden">
+      <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 overflow-hidden max-h-[calc(100vh-110px)]">
         {/* LEFT COLUMN */}
-        <div className="flex flex-col gap-3 h-full">
+        <div className="flex flex-col gap-3 overflow-hidden">
           <h2 className="font-extrabold text-green-800 text-lg md:text-xl">
             Yearbook Photo Selection Tool
           </h2>
 
           {/* WELCOME SECTION */}
           {student && (
-            <div className="border-2 border-green-800 rounded-2xl p-3 bg-white shadow-sm">
+            <div className="border-2 border-green-800 rounded-2xl p-3 bg-white shadow-sm flex-shrink-0">
               <p className="text-base">
                 Welcome,{' '}
                 <span className="font-bold text-green-800">
@@ -164,7 +164,7 @@ export default function YearbookPickerPage() {
 
           {/* PHOTO GALLERY */}
           {student && (
-            <div className="border-2 border-green-800 rounded-2xl p-3 bg-white shadow-sm flex flex-col flex-1 overflow-y-auto">
+            <div className="border-2 border-green-800 rounded-2xl p-3 bg-white shadow-sm flex flex-col flex-grow overflow-y-auto">
               <h3 className="font-bold text-green-800 text-base mb-2">
                 Photo Gallery
               </h3>
@@ -199,9 +199,9 @@ export default function YearbookPickerPage() {
         </div>
 
         {/* RIGHT COLUMN */}
-        <div className="flex flex-col gap-3 h-full">
+        <div className="flex flex-col gap-3 overflow-hidden">
           {/* CHOSEN PHOTO */}
-          <div className="border-2 border-green-800 rounded-2xl p-3 bg-white shadow-sm flex flex-col items-center flex-1 justify-center">
+          <div className="border-2 border-green-800 rounded-2xl p-3 bg-white shadow-sm flex flex-col items-center flex-shrink-0">
             {student ? (
               <>
                 <h3 className="font-bold text-green-800 text-base mb-2">
@@ -265,7 +265,7 @@ export default function YearbookPickerPage() {
 
           {/* CONFIRM SECTION */}
           {student && (
-            <div className="border-2 border-green-800 rounded-2xl p-3 bg-white shadow-sm flex flex-col items-center justify-center flex-shrink-0">
+            <div className="border-2 border-green-800 rounded-2xl p-3 bg-white shadow-sm flex flex-col items-center flex-shrink-0">
               <p className="text-gray-700 font-semibold mb-2 text-center text-sm">
                 Your photo package comes with one photo for editing and
                 printing.
