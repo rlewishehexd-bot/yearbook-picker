@@ -48,10 +48,10 @@ export default function YearbookPickerPage() {
     const calculateHeight = () => {
       if (!galleryRef.current) return;
       const containerWidth = galleryRef.current.clientWidth;
-      const columns = window.innerWidth >= 640 ? 3 : 2; // sm breakpoint
-      const gap = 12; // Tailwind gap-3 = 0.75rem = 12px
+      const columns = window.innerWidth >= 640 ? 3 : 2;
+      const gap = 12; // Tailwind gap-3 = 0.75rem
       const cardWidth = (containerWidth - gap * (columns - 1)) / columns;
-      const cardHeight = (cardWidth * 5) / 4; // aspect ratio 4:5
+      const cardHeight = (cardWidth * 5) / 4;
       const rows = 2;
       const totalHeight = cardHeight * rows + gap * (rows - 1);
       setGalleryHeight(totalHeight);
@@ -153,15 +153,14 @@ export default function YearbookPickerPage() {
         </p>
       </header>
 
-      {/* MAIN GRID */}
       <div className="flex-1 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* LEFT COLUMN */}
         <div className="flex flex-col gap-4">
-          {/* Yearbook tool input view */}
+          {/* FIRST VIEW: INPUT BOX */}
           {!student && (
             <div className="flex justify-center items-start mt-6">
-              <div className="border-2 border-green-800 rounded-2xl p-6 bg-white shadow-sm flex flex-col items-center w-full max-w-md">
-                <h2 className="font-extrabold text-green-800 text-xl md:text-2xl mb-4 text-center">
+              <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center w-full max-w-md">
+                <h2 className="font-extrabold text-green-800 text-xl md:text-2xl mb-3 text-center">
                   Yearbook Photo Selection Tool
                 </h2>
                 <input
@@ -200,7 +199,7 @@ export default function YearbookPickerPage() {
             </div>
           )}
 
-          {/* Welcome & gallery section */}
+          {/* WELCOME & GALLERY */}
           {student && (
             <>
               <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm">
@@ -225,61 +224,58 @@ export default function YearbookPickerPage() {
               </div>
 
               {/* PHOTO GALLERY */}
-              <div
-                ref={galleryRef}
-                className="relative border-2 border-green-800 rounded-2xl p-4 pr-4 bg-white shadow-sm overflow-y-auto"
-                style={{
-                  maxHeight: galleryHeight || 480,
-                }}
-                onScroll={() =>
-                  setGalleryScroll(galleryRef.current?.scrollTop || 0)
-                }
-              >
-                <h3 className="font-bold text-green-800 text-lg mb-3">
-                  Photo Gallery
-                </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {photos.map((photo) => {
-                    const isSelected = selected === photo.url;
-                    return (
-                      <div
-                        key={photo.url}
-                        className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-green-800 ${
-                          isSelected ? 'ring-offset-2' : 'hover:ring-green-800'
-                        } transition-all`}
-                        onClick={() => setSelected(photo.url)}
-                      >
-                        <Image
-                          src={photo.url}
-                          alt="photo"
-                          fill
-                          style={{
-                            objectFit: 'cover',
-                            borderRadius: '0.5rem',
-                          }}
-                        />
-                        {isSelected && (
-                          <div className="absolute top-1 right-1 bg-white rounded-full p-1">
-                            <CheckCircle className="w-5 h-5 text-green-800" />
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+              <div className="relative">
+                <div
+                  ref={galleryRef}
+                  className="border-2 border-green-800 rounded-2xl p-4 pr-4 bg-white shadow-sm overflow-y-auto"
+                  style={{ maxHeight: galleryHeight || 480 }}
+                  onScroll={(e) =>
+                    setGalleryScroll((e.target as HTMLDivElement).scrollTop)
+                  }
+                >
+                  <h3 className="font-bold text-green-800 text-lg mb-3">
+                    Photo Gallery
+                  </h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {photos.map((photo) => {
+                      const isSelected = selected === photo.url;
+                      return (
+                        <div
+                          key={photo.url}
+                          className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-green-800 ${
+                            isSelected
+                              ? 'ring-offset-2'
+                              : 'hover:ring-green-800'
+                          } transition-all`}
+                          onClick={() => setSelected(photo.url)}
+                        >
+                          <Image
+                            src={photo.url}
+                            alt="photo"
+                            fill
+                            style={{
+                              objectFit: 'cover',
+                              borderRadius: '0.5rem',
+                            }}
+                          />
+                          {isSelected && (
+                            <div className="absolute top-1 right-1 bg-white rounded-full p-1">
+                              <CheckCircle className="w-5 h-5 text-green-800" />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
 
-                {/* Top scroll hint */}
-                {galleryScroll > 0 && (
-                  <div className="pointer-events-none absolute top-0 left-0 w-full h-6 bg-gradient-to-b from-white to-transparent rounded-t-2xl" />
+                {/* Scroll hint gradients */}
+                {photos.length > 6 && (
+                  <>
+                    <div className="pointer-events-none absolute top-0 left-0 w-full h-8 bg-gradient-to-b from-white/60 to-white rounded-t-2xl"></div>
+                    <div className="pointer-events-none absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-white/60 to-white rounded-b-2xl"></div>
+                  </>
                 )}
-
-                {/* Bottom scroll hint */}
-                {photos.length > 6 &&
-                  galleryRef.current &&
-                  galleryRef.current.scrollHeight >
-                    galleryRef.current.clientHeight && (
-                    <div className="pointer-events-none absolute bottom-0 left-0 w-full h-6 bg-gradient-to-t from-white to-transparent rounded-b-2xl" />
-                  )}
               </div>
             </>
           )}
