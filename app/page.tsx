@@ -119,29 +119,29 @@ export default function YearbookPickerPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6">
+    <div className="h-screen w-full overflow-hidden bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-4 md:p-6 flex flex-col">
       {/* HEADER */}
-      <header className="text-center mb-6">
-        <h1 className="font-extrabold text-2xl md:text-3xl text-green-800">
+      <header className="text-center mb-3 flex-shrink-0">
+        <h1 className="font-extrabold text-2xl md:text-3xl text-green-800 leading-tight">
           Tino Ley Digital Photography
         </h1>
-        <p className="text-lg md:text-xl font-semibold text-gray-700">
+        <p className="text-sm md:text-base font-semibold text-gray-700">
           International School Manila SY2025-2026
         </p>
       </header>
 
       {/* MAIN GRID */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 flex-grow max-h-[calc(100vh-110px)] overflow-hidden">
         {/* LEFT COLUMN */}
-        <div className="flex flex-col gap-4">
-          <h2 className="font-extrabold text-green-800 text-xl md:text-2xl">
+        <div className="flex flex-col gap-3 h-full">
+          <h2 className="font-extrabold text-green-800 text-lg md:text-xl">
             Yearbook Photo Selection Tool
           </h2>
 
           {/* WELCOME SECTION */}
           {student && (
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm">
-              <p className="text-lg">
+            <div className="border-2 border-green-800 rounded-2xl p-3 bg-white shadow-sm">
+              <p className="text-base">
                 Welcome,{' '}
                 <span className="font-bold text-green-800">
                   {student.firstName} {student.lastName}
@@ -151,7 +151,7 @@ export default function YearbookPickerPage() {
                 Don’t forget to submit your chosen photo, order form, and
                 payment by your department’s deadline!
               </p>
-              <ul className="list-disc list-inside text-sm mt-2">
+              <ul className="list-disc list-inside text-xs mt-1">
                 <li>ES: October 24</li>
                 <li className="line-through text-red-600">MS: October 10</li>
                 <li className="line-through text-red-600">
@@ -164,17 +164,17 @@ export default function YearbookPickerPage() {
 
           {/* PHOTO GALLERY */}
           {student && (
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col flex-grow min-h-[300px] max-h-[600px] overflow-y-auto">
-              <h3 className="font-bold text-green-800 text-lg mb-3">
+            <div className="border-2 border-green-800 rounded-2xl p-3 bg-white shadow-sm flex flex-col flex-1 overflow-y-auto">
+              <h3 className="font-bold text-green-800 text-base mb-2">
                 Photo Gallery
               </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {photos.map((photo) => {
                   const isSelected = selected === photo.url;
                   return (
                     <div
                       key={photo.url}
-                      className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-green-800 ${
+                      className={`relative cursor-pointer w-full aspect-[4/5] rounded-md ring-2 ring-green-800 ${
                         isSelected ? 'ring-offset-2' : 'hover:ring-green-800'
                       } transition-all`}
                       onClick={() => setSelected(photo.url)}
@@ -183,11 +183,11 @@ export default function YearbookPickerPage() {
                         src={photo.url}
                         alt="photo"
                         fill
-                        style={{ objectFit: 'cover', borderRadius: '0.5rem' }}
+                        style={{ objectFit: 'cover', borderRadius: '0.25rem' }}
                       />
                       {isSelected && (
-                        <div className="absolute top-1 right-1 bg-white rounded-full p-1">
-                          <CheckCircle className="w-5 h-5 text-green-800" />
+                        <div className="absolute top-1 right-1 bg-white rounded-full p-0.5">
+                          <CheckCircle className="w-4 h-4 text-green-800" />
                         </div>
                       )}
                     </div>
@@ -199,16 +199,16 @@ export default function YearbookPickerPage() {
         </div>
 
         {/* RIGHT COLUMN */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3 h-full">
           {/* CHOSEN PHOTO */}
-          <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
+          <div className="border-2 border-green-800 rounded-2xl p-3 bg-white shadow-sm flex flex-col items-center flex-1 justify-center">
             {student ? (
               <>
-                <h3 className="font-bold text-green-800 text-lg mb-2">
+                <h3 className="font-bold text-green-800 text-base mb-2">
                   Chosen Photo
                 </h3>
                 {selected ? (
-                  <div className="relative w-full max-w-xs aspect-[4/5] rounded-lg overflow-hidden ring-2 ring-green-800">
+                  <div className="relative w-full max-w-xs aspect-[4/5] rounded-md overflow-hidden ring-2 ring-green-800">
                     <Image
                       src={selected}
                       alt="Chosen photo"
@@ -216,11 +216,11 @@ export default function YearbookPickerPage() {
                       style={{ objectFit: 'cover' }}
                     />
                     <div className="absolute top-1 right-1 bg-white rounded-full p-1">
-                      <CheckCircle className="w-6 h-6 text-green-800" />
+                      <CheckCircle className="w-5 h-5 text-green-800" />
                     </div>
                   </div>
                 ) : (
-                  <div className="w-full max-w-xs aspect-[4/5] flex items-center justify-center text-gray-600 border border-dashed border-green-800 rounded-lg">
+                  <div className="w-full max-w-xs aspect-[4/5] flex items-center justify-center text-gray-600 border border-dashed border-green-800 rounded-md">
                     No Photo Selected
                   </div>
                 )}
@@ -232,7 +232,7 @@ export default function YearbookPickerPage() {
                   placeholder="Enter your code"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  className="border-2 border-green-800 rounded-lg px-3 py-2 w-64 text-center focus:ring-2 focus:ring-green-600 outline-none mb-3"
+                  className="border-2 border-green-800 rounded-lg px-3 py-2 w-60 text-center focus:ring-2 focus:ring-green-600 outline-none mb-2"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') fetchStudentData();
                   }}
@@ -241,21 +241,21 @@ export default function YearbookPickerPage() {
                 />
                 <button
                   onClick={fetchStudentData}
-                  className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50"
+                  className="bg-green-800 text-white px-5 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50"
                   disabled={loading || !code}
                 >
                   {loading ? (
-                    <Loader2 className="w-5 h-5 animate-spin inline-block mr-2" />
+                    <Loader2 className="w-4 h-4 animate-spin inline-block mr-2" />
                   ) : null}
                   Submit
                 </button>
                 {error && (
-                  <p className="text-red-500 mt-2 flex items-center text-sm">
+                  <p className="text-red-500 mt-1 flex items-center text-sm">
                     <XCircle className="w-4 h-4 mr-1" /> {error}
                   </p>
                 )}
                 {success && (
-                  <p className="text-green-600 mt-2 flex items-center text-sm">
+                  <p className="text-green-600 mt-1 flex items-center text-sm">
                     <CheckCircle className="w-4 h-4 mr-1" /> {success}
                   </p>
                 )}
@@ -265,23 +265,23 @@ export default function YearbookPickerPage() {
 
           {/* CONFIRM SECTION */}
           {student && (
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
-              <p className="text-gray-700 font-semibold mb-3 text-center">
+            <div className="border-2 border-green-800 rounded-2xl p-3 bg-white shadow-sm flex flex-col items-center justify-center flex-shrink-0">
+              <p className="text-gray-700 font-semibold mb-2 text-center text-sm">
                 Your photo package comes with one photo for editing and
                 printing.
               </p>
               <button
                 onClick={handleConfirm}
-                className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
+                className="bg-green-800 text-white px-5 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
                 disabled={!selected || loading}
               >
                 {loading ? (
-                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
                 ) : null}
                 Set as Chosen Photo
               </button>
               {success && (
-                <p className="text-green-600 mt-2 flex items-center text-sm">
+                <p className="text-green-600 mt-1 flex items-center text-sm">
                   <CheckCircle className="w-4 h-4 mr-1" /> {success}
                 </p>
               )}
