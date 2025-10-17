@@ -188,43 +188,54 @@ export default function YearbookPickerPage() {
           {student && (
             <div
               ref={galleryRef}
-              className={`border-2 border-green-800 rounded-2xl p-4 pr-6 bg-white shadow-sm ${
-                photos.length > 6
-                  ? 'overflow-y-auto scrollbar-thin scrollbar-thumb-green-800 scrollbar-track-gray-200 scroll-smooth rounded-lg'
-                  : 'overflow-hidden'
-              }`}
-              style={{
-                maxHeight: galleryHeight || 480, // fallback to 480px
-              }}
+              className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm"
+              style={{ maxHeight: galleryHeight || 480 }}
             >
               <h3 className="font-bold text-green-800 text-lg mb-3">
                 Photo Gallery
               </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {photos.map((photo) => {
-                  const isSelected = selected === photo.url;
-                  return (
-                    <div
-                      key={photo.url}
-                      className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-green-800 ${
-                        isSelected ? 'ring-offset-2' : 'hover:ring-green-800'
-                      } transition-all`}
-                      onClick={() => setSelected(photo.url)}
-                    >
-                      <Image
-                        src={photo.url}
-                        alt="photo"
-                        fill
-                        style={{ objectFit: 'cover', borderRadius: '0.5rem' }}
-                      />
-                      {isSelected && (
-                        <div className="absolute top-1 right-1 bg-white rounded-full p-1">
-                          <CheckCircle className="w-5 h-5 text-green-800" />
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+              {/* Scroll wrapper only if more than 6 photos */}
+              <div
+                className={`${
+                  photos.length > 6
+                    ? 'overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-green-800 scrollbar-track-gray-200 scroll-smooth rounded-lg'
+                    : ''
+                }`}
+                style={{
+                  maxHeight:
+                    photos.length > 6
+                      ? galleryHeight
+                        ? galleryHeight - 32
+                        : 448
+                      : 'auto',
+                }}
+              >
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {photos.map((photo) => {
+                    const isSelected = selected === photo.url;
+                    return (
+                      <div
+                        key={photo.url}
+                        className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-green-800 ${
+                          isSelected ? 'ring-offset-2' : 'hover:ring-green-800'
+                        } transition-all`}
+                        onClick={() => setSelected(photo.url)}
+                      >
+                        <Image
+                          src={photo.url}
+                          alt="photo"
+                          fill
+                          style={{ objectFit: 'cover', borderRadius: '0.5rem' }}
+                        />
+                        {isSelected && (
+                          <div className="absolute top-1 right-1 bg-white rounded-full p-1">
+                            <CheckCircle className="w-5 h-5 text-green-800" />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           )}
