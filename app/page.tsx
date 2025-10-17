@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-// RESTORING EXTERNAL IMPORTS FOR NEXT.JS PRODUCTION ENVIRONMENT
 import { db } from '../lib/firebaseClient';
 import {
   doc,
@@ -9,8 +8,8 @@ import {
   updateDoc,
   serverTimestamp,
   Timestamp,
-  query, // CRITICAL: Used for secure lookup
-  where, // CRITICAL: Used for secure lookup
+  query,
+  where,
 } from 'firebase/firestore';
 import { CheckCircle, Loader2, XCircle } from 'lucide-react';
 import Image from 'next/image';
@@ -18,7 +17,7 @@ import Image from 'next/image';
 type Photo = {
   url: string;
   timestamp: Timestamp;
-  originalName: string; // The original file name
+  originalName: string;
 };
 type Student = {
   firstName: string;
@@ -26,7 +25,7 @@ type Student = {
   chosenPhotoUrl?: string;
   chosenPhotoName?: string | null;
   hasChosen?: boolean;
-  uniquecode: string; // The field used for access/lookup
+  uniquecode: string;
 };
 
 export default function YearbookPickerPage() {
@@ -129,7 +128,7 @@ export default function YearbookPickerPage() {
         }}
       >
         {/* Header */}
-        <div className="w-full text-center pb-4">
+        <div className="w-full text-center pb-4 shrink-0">
           <h1 className="font-extrabold text-2xl md:text-3xl text-green-800">
             Tino Ley Digital Photography
           </h1>
@@ -144,37 +143,39 @@ export default function YearbookPickerPage() {
           style={{ gap: '24px' }}
         >
           {/* Left Column */}
-          <div className="flex-1 flex flex-col justify-start items-center md:items-start overflow-auto p-2">
-            <h2 className="font-extrabold text-center mx-auto md:mx-0 text-2x1 md:text-2xl mb-6 text-green-800">
-              Yearbook Photo Selection Tool
-            </h2>
+          <div className="flex-1 flex flex-col justify-between items-center md:items-start p-2 min-h-0">
+            <div className="w-full flex flex-col items-center md:items-start">
+              <h2 className="font-extrabold text-center mx-auto md:mx-0 text-2x1 md:text-2xl mb-4 text-green-800">
+                Yearbook Photo Selection Tool
+              </h2>
 
-            {student && (
-              <div className="text-gray-700 mb-6 w-full border-2 rounded-2xl p-6 border-green-800">
-                <p className="text-lg font-medium mb-1">
-                  Welcome,{' '}
-                  <span className="font-bold text-green-800">
-                    {student.firstName} {student.lastName}
-                  </span>
-                </p>
-                <p className="text-base font-semibold text-red-600 mb-2">
-                  Don&apos;t forget to submit your chosen photo, order form, and
-                  payment by your department&apos;s deadline!
-                </p>
-                <ul className="list-disc list-inside text-sm font-medium ml-4">
-                  <li className="mb-0.5">ES: October 24</li>
-                  <li className="mb-0.5 line-through text-red-600">
-                    MS: October 10
-                  </li>
-                  <li className="mb-0.5 line-through text-red-600">
-                    HS Undergrad: October 10
-                  </li>
-                  <li className="mb-0.5">Seniors: October 18</li>
-                </ul>
-              </div>
-            )}
+              {student && (
+                <div className="text-gray-700 mb-4 w-full border-2 rounded-2xl p-5 border-green-800">
+                  <p className="text-lg font-medium mb-1">
+                    Welcome,{' '}
+                    <span className="font-bold text-green-800">
+                      {student.firstName} {student.lastName}
+                    </span>
+                  </p>
+                  <p className="text-base font-semibold text-red-600 mb-2">
+                    Don&apos;t forget to submit your chosen photo, order form,
+                    and payment by your department&apos;s deadline!
+                  </p>
+                  <ul className="list-disc list-inside text-sm font-medium ml-4">
+                    <li>ES: October 24</li>
+                    <li className="line-through text-red-600">
+                      MS: October 10
+                    </li>
+                    <li className="line-through text-red-600">
+                      HS Undergrad: October 10
+                    </li>
+                    <li>Seniors: October 18</li>
+                  </ul>
+                </div>
+              )}
+            </div>
 
-            <div className="bg-white rounded-2xl flex flex-col items-center w-full relative p-3 border-2 border-green-800 shadow">
+            <div className="bg-white rounded-2xl flex flex-col items-center w-full relative p-3 border-2 border-green-800 shadow shrink-0">
               {student && (
                 <h3 className="font-bold mb-3 text-green-800 text-lg md:text-xl text-center p-1">
                   Chosen Photo
@@ -218,20 +219,20 @@ export default function YearbookPickerPage() {
                   )}
                 </div>
               ) : (
-                <div className="w-full aspect-[4/5] relative cursor-pointer ring-2 ring-green-800 rounded-lg">
+                <div className="w-full aspect-[4/5] relative ring-2 ring-green-800 rounded-lg overflow-hidden">
                   {selected ? (
-                    <div className="relative w-full h-full">
+                    <>
                       <Image
                         src={selected}
                         alt="Selected photo"
                         fill
-                        style={{ objectFit: 'cover', borderRadius: '0.5rem' }}
+                        style={{ objectFit: 'cover' }}
                         priority
                       />
                       <div className="absolute top-1 right-1 rounded-full p-1 bg-white flex items-center justify-center">
                         <CheckCircle className="w-6 h-6 text-green-800" />
                       </div>
-                    </div>
+                    </>
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-center text-green-700">
                       No Photo Selected
