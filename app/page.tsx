@@ -228,7 +228,7 @@ export default function YearbookPickerPage() {
 
         {/* RIGHT COLUMN */}
         {student && (
-          <div className="flex flex-col gap-4 order-3 md:order-2">
+          <div className="flex flex-col gap-4 order-4 md:order-2">
             {/* PHOTO GALLERY */}
             <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col flex-grow min-h-[300px] max-h-[600px] overflow-y-auto order-4 md:order-2">
               <h3 className="font-bold text-green-800 text-lg mb-3">
