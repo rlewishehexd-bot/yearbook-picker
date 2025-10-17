@@ -144,7 +144,7 @@ export default function YearbookPickerPage() {
         <div className="flex flex-col md:flex-row" style={{ gap: '24px' }}>
           {/* Left Column */}
           <div className="flex-1 flex flex-col justify-center md:justify-start items-center md:items-start">
-            <h2 className="font-extrabold text-center mx-auto md:mx-0 text-1x1 md:text-3xl mb-6 text-green-800">
+            <h2 className="font-extrabold text-center mx-auto md:mx-0 text-2x1 md:text-2xl mb-6 text-green-800">
               Yearbook Photo Selection Tool
             </h2>
             {/* Student Welcome */}
