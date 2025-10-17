@@ -154,7 +154,9 @@ export default function YearbookPickerPage() {
         <div className="flex-1 flex flex-col justify-center md:justify-start items-center md:items-start">
           <h1 className="font-extrabold text-center mx-auto md:mx-0 text-2xl md:text-3xl mb-6 text-green-800">
             <a href="https://www.yearbook-picker.vercel.app">
-              Yearbook Picture Tool
+              Tino Ley Digital Photography<br></br>
+              International School Manila SY2025-2026<br></br>
+              Yearbook Photo Selection Tool
             </a>
           </h1>
 
@@ -290,7 +292,7 @@ export default function YearbookPickerPage() {
 
             {/* Confirm Button */}
             <div className="bg-white rounded-2xl flex flex-col items-center justify-center p-6 border-2 border-green-800 shadow">
-              <p className="text-gray-700 font- mb-3">
+              <p className="text-gray-700 font-semibold mb-3">
                 Your photo package comes with one photo for editing and
                 printing.
               </p>
