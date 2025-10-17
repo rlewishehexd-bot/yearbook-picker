@@ -133,9 +133,9 @@ export default function YearbookPickerPage() {
       >
         {/* NEW 1-COLUMN HEADER ROW: Tino Ley Digital Photography / School Year */}
         <div className="w-full text-center pb-4">
-          <h2 className="font-extrabold text-2xl md:text-3xl text-green-800">
+          <h1 className="font-extrabold text-2xl md:text-3xl text-green-800">
             Tino Ley Digital Photography
-          </h2>
+          </h1>
           <p className="text-lg md:text-xl font-bold text-gray-700">
             International School Manila SY2025-2026
           </p>
@@ -144,9 +144,9 @@ export default function YearbookPickerPage() {
         <div className="flex flex-col md:flex-row" style={{ gap: '24px' }}>
           {/* Left Column */}
           <div className="flex-1 flex flex-col justify-center md:justify-start items-center md:items-start">
-            <h1 className="font-extrabold text-center mx-auto md:mx-0 text-2xl md:text-3xl mb-6 text-green-800">
+            <h2 className="font-extrabold text-center mx-auto md:mx-0 text-1x1 md:text-3xl mb-6 text-green-800">
               Yearbook Photo Selection Tool
-            </h1>
+            </h2>
             {/* Student Welcome */}
             {student && (
               <div className="text-gray-700 mb-6 w-full border-2 rounded-2xl p-6 border-green-800">
