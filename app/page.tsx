@@ -132,8 +132,8 @@ export default function YearbookPickerPage() {
 
       {/* MAIN GRID */}
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* LEFT COLUMN (Welcome section) */}
-        <div className="flex flex-col gap-4 order-1 md:order-1">
+        {/* LEFT COLUMN */}
+        <div className="flex flex-col gap-4">
           <h2 className="font-extrabold text-green-800 text-xl md:text-2xl">
             Yearbook Photo Selection Tool
           </h2>
@@ -161,13 +161,10 @@ export default function YearbookPickerPage() {
               </ul>
             </div>
           )}
-        </div>
 
-        {/* RIGHT COLUMN (Gallery + Confirm) */}
-        {student && (
-          <div className="flex flex-col gap-4 order-2 md:order-2">
-            {/* PHOTO GALLERY */}
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col flex-grow min-h-[300px] max-h-[600px] overflow-y-auto order-2 md:order-2">
+          {/* PHOTO GALLERY */}
+          {student && (
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col flex-grow min-h-[300px] max-h-[600px] overflow-y-auto">
               <h3 className="font-bold text-green-800 text-lg mb-3">
                 Photo Gallery
               </h3>
@@ -198,34 +195,12 @@ export default function YearbookPickerPage() {
                 })}
               </div>
             </div>
+          )}
+        </div>
 
-            {/* CONFIRM SECTION */}
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center order-4 md:order-5">
-              <p className="text-gray-700 font-semibold mb-3 text-center">
-                Your photo package comes with one photo for editing and
-                printing.
-              </p>
-              <button
-                onClick={handleConfirm}
-                className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
-                disabled={!selected || loading}
-              >
-                {loading ? (
-                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                ) : null}
-                Set as Chosen Photo
-              </button>
-              {success && (
-                <p className="text-green-600 mt-2 flex items-center text-sm">
-                  <CheckCircle className="w-4 h-4 mr-1" /> {success}
-                </p>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* CHOSEN PHOTO – separate block for proper responsive ordering */}
-        <div className="order-3 md:col-start-1 md:row-start-2 md:order-1">
+        {/* RIGHT COLUMN */}
+        <div className="flex flex-col gap-4">
+          {/* CHOSEN PHOTO */}
           <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
             {student ? (
               <>
@@ -287,6 +262,31 @@ export default function YearbookPickerPage() {
               </>
             )}
           </div>
+
+          {/* CONFIRM SECTION */}
+          {student && (
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
+              <p className="text-gray-700 font-semibold mb-3 text-center">
+                Your photo package comes with one photo for editing and
+                printing.
+              </p>
+              <button
+                onClick={handleConfirm}
+                className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
+                disabled={!selected || loading}
+              >
+                {loading ? (
+                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                ) : null}
+                Set as Chosen Photo
+              </button>
+              {success && (
+                <p className="text-green-600 mt-2 flex items-center text-sm">
+                  <CheckCircle className="w-4 h-4 mr-1" /> {success}
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
