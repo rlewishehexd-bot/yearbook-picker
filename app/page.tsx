@@ -158,14 +158,14 @@ export default function YearbookPickerPage() {
 
           {/* Student Welcome */}
           {student && (
-            <div className="text-gray-700 mb-6 w-full">
+            <div className="text-gray-700 mb-6 w-full border-2 rounded-2xl border-green-800">
               <p className="text-lg font-medium mb-1">
                 Welcome,{' '}
                 <span className="font-bold text-green-800">
                   {student.firstName} {student.lastName}
                 </span>
               </p>
-              <p className="text-base font-bold border-2 border-green-800 text-red-800 mb-2">
+              <p className="text-base font-semibold  text-red-800 mb-2">
                 Don&apos;t forget to submit your chosen photo, order form, and
                 payment by your department&apos;s deadline!
               </p>
