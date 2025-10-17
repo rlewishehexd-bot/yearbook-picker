@@ -40,20 +40,22 @@ export default function YearbookPickerPage() {
   const [success, setSuccess] = useState('');
 
   const galleryRef = useRef<HTMLDivElement>(null);
-  const [galleryHeight, setGalleryHeight] = useState<number>(0);
+  const [galleryHeight, setGalleryHeight] = useState<number>(480); // default 2-row height
 
+  // Dynamically calculate gallery height based on 2 rows
   useEffect(() => {
     const calculateHeight = () => {
       if (!galleryRef.current) return;
       const containerWidth = galleryRef.current.clientWidth;
-      const columns = window.innerWidth >= 640 ? 3 : 2;
-      const gap = 12;
+      const columns = window.innerWidth >= 640 ? 3 : 2; // sm breakpoint
+      const gap = 12; // Tailwind gap-3 = 12px
       const cardWidth = (containerWidth - gap * (columns - 1)) / columns;
-      const cardHeight = (cardWidth * 5) / 4;
-      const rows = 2;
+      const cardHeight = (cardWidth * 5) / 4; // 4:5 aspect ratio
+      const rows = 2; // always show 2 rows max
       const totalHeight = cardHeight * rows + gap * (rows - 1);
       setGalleryHeight(totalHeight);
     };
+
     calculateHeight();
     window.addEventListener('resize', calculateHeight);
     return () => window.removeEventListener('resize', calculateHeight);
@@ -139,7 +141,7 @@ export default function YearbookPickerPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6 flex flex-col items-center">
+    <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6 flex flex-col">
       {/* HEADER */}
       <header className="text-center mb-6 flex-shrink-0">
         <h1 className="font-extrabold text-2xl md:text-3xl text-green-800">
@@ -150,57 +152,16 @@ export default function YearbookPickerPage() {
         </p>
       </header>
 
-      {/* FIRST VIEW: Code input */}
-      {!student && (
-        <div className="flex justify-center w-full">
-          <div className="border-2 border-green-800 rounded-2xl bg-white shadow-sm px-6 py-3 flex flex-col items-center max-w-sm w-full mt-4">
-            <h2 className="font-extrabold text-green-800 text-xl mb-2 text-center">
-              Yearbook Photo Selection Tool
-            </h2>
-            <input
-              type="text"
-              placeholder="Enter your code"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              className="border-2 border-green-800 rounded-lg px-3 py-2 w-full text-center focus:ring-2 focus:ring-green-600 outline-none mb-3"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') fetchStudentData();
-              }}
-              autoComplete="off"
-              disabled={loading}
-            />
-            <button
-              onClick={fetchStudentData}
-              className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center justify-center"
-              disabled={loading || !code}
-            >
-              {loading && <Loader2 className="w-5 h-5 animate-spin mr-2" />}
-              Submit
-            </button>
-            {error && (
-              <p className="text-red-500 mt-2 flex items-center text-sm">
-                <XCircle className="w-4 h-4 mr-1" /> {error}
-              </p>
-            )}
-            {success && (
-              <p className="text-green-600 mt-2 flex items-center text-sm">
-                <CheckCircle className="w-4 h-4 mr-1" /> {success}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
+      {/* MAIN GRID */}
+      <div className="flex-1 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* LEFT COLUMN */}
+        <div className="flex flex-col gap-4">
+          <h2 className="font-extrabold text-green-800 text-xl md:text-2xl">
+            Yearbook Photo Selection Tool
+          </h2>
 
-      {/* SECOND VIEW: Yearbook selection */}
-      {student && (
-        <div className="flex-1 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 w-full mt-4">
-          {/* LEFT COLUMN */}
-          <div className="flex flex-col gap-4">
-            <h2 className="font-extrabold text-green-800 text-xl md:text-2xl">
-              Yearbook Photo Selection Tool
-            </h2>
-
-            {/* WELCOME */}
+          {/* WELCOME SECTION */}
+          {student && (
             <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm">
               <p className="text-lg">
                 Welcome,{' '}
@@ -221,12 +182,17 @@ export default function YearbookPickerPage() {
                 <li>Seniors: October 18</li>
               </ul>
             </div>
+          )}
 
-            {/* PHOTO GALLERY */}
+          {/* PHOTO GALLERY */}
+          {student && (
             <div
               ref={galleryRef}
-              className="border-2 border-green-800 rounded-2xl p-4 pr-6 bg-white shadow-sm overflow-y-auto"
-              style={{ maxHeight: galleryHeight || 480 }}
+              className={`border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm overflow-y-auto`}
+              style={{
+                maxHeight: galleryHeight,
+                paddingRight: 12, // extra padding to prevent scrollbar overlapping border
+              }}
             >
               <h3 className="font-bold text-green-800 text-lg mb-3">
                 Photo Gallery
@@ -258,59 +224,97 @@ export default function YearbookPickerPage() {
                 })}
               </div>
             </div>
-          </div>
+          )}
 
-          {/* RIGHT COLUMN */}
-          {student && (
-            <div className="flex flex-col gap-4">
-              {/* CHOSEN PHOTO */}
-              <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
-                <h3 className="font-bold text-green-800 text-lg mb-2">
-                  Chosen Photo
-                </h3>
-                {selected ? (
-                  <div className="relative w-full max-w-xs aspect-[4/5] rounded-lg overflow-hidden ring-2 ring-green-800">
-                    <Image
-                      src={selected}
-                      alt="Chosen photo"
-                      fill
-                      style={{ objectFit: 'cover' }}
-                    />
-                    <div className="absolute top-1 right-1 bg-white rounded-full p-1">
-                      <CheckCircle className="w-6 h-6 text-green-800" />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="w-full max-w-xs aspect-[4/5] flex items-center justify-center text-gray-600 border border-dashed border-green-800 rounded-lg">
-                    No Photo Selected
-                  </div>
+          {/* LOGIN / CODE INPUT */}
+          {!student && (
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
+              <input
+                type="text"
+                placeholder="Enter your code"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                className="border-2 border-green-800 rounded-lg px-3 py-2 w-64 text-center focus:ring-2 focus:ring-green-600 outline-none mb-3"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') fetchStudentData();
+                }}
+                autoComplete="off"
+                disabled={loading}
+              />
+              <button
+                onClick={fetchStudentData}
+                className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50"
+                disabled={loading || !code}
+              >
+                {loading && (
+                  <Loader2 className="w-5 h-5 animate-spin inline-block mr-2" />
                 )}
-              </div>
-
-              {/* CONFIRM SECTION */}
-              <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
-                <p className="text-gray-700 font-semibold mb-3 text-center">
-                  Your photo package comes with one photo for editing and
-                  printing.
+                Submit
+              </button>
+              {error && (
+                <p className="text-red-500 mt-2 flex items-center text-sm">
+                  <XCircle className="w-4 h-4 mr-1" /> {error}
                 </p>
-                <button
-                  onClick={handleConfirm}
-                  className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
-                  disabled={!selected || loading}
-                >
-                  {loading && <Loader2 className="w-5 h-5 animate-spin mr-2" />}
-                  Set as Chosen Photo
-                </button>
-                {success && (
-                  <p className="text-green-600 mt-2 flex items-center text-sm">
-                    <CheckCircle className="w-4 h-4 mr-1" /> {success}
-                  </p>
-                )}
-              </div>
+              )}
+              {success && (
+                <p className="text-green-600 mt-2 flex items-center text-sm">
+                  <CheckCircle className="w-4 h-4 mr-1" /> {success}
+                </p>
+              )}
             </div>
           )}
         </div>
-      )}
+
+        {/* RIGHT COLUMN */}
+        {student && (
+          <div className="flex flex-col gap-4">
+            {/* CHOSEN PHOTO */}
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
+              <h3 className="font-bold text-green-800 text-lg mb-2">
+                Chosen Photo
+              </h3>
+              {selected ? (
+                <div className="relative w-full max-w-xs aspect-[4/5] rounded-lg overflow-hidden ring-2 ring-green-800">
+                  <Image
+                    src={selected}
+                    alt="Chosen photo"
+                    fill
+                    style={{ objectFit: 'cover' }}
+                  />
+                  <div className="absolute top-1 right-1 bg-white rounded-full p-1">
+                    <CheckCircle className="w-6 h-6 text-green-800" />
+                  </div>
+                </div>
+              ) : (
+                <div className="w-full max-w-xs aspect-[4/5] flex items-center justify-center text-gray-600 border border-dashed border-green-800 rounded-lg">
+                  No Photo Selected
+                </div>
+              )}
+            </div>
+
+            {/* CONFIRM SECTION */}
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
+              <p className="text-gray-700 font-semibold mb-3 text-center">
+                Your photo package comes with one photo for editing and
+                printing.
+              </p>
+              <button
+                onClick={handleConfirm}
+                className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
+                disabled={!selected || loading}
+              >
+                {loading && <Loader2 className="w-5 h-5 animate-spin mr-2" />}
+                Set as Chosen Photo
+              </button>
+              {success && (
+                <p className="text-green-600 mt-2 flex items-center text-sm">
+                  <CheckCircle className="w-4 h-4 mr-1" /> {success}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
