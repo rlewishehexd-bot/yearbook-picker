@@ -14,6 +14,7 @@ import {
 } from 'firebase/firestore';
 import { CheckCircle, Loader2, XCircle } from 'lucide-react';
 import Image from 'next/image';
+
 type Photo = {
   url: string;
   timestamp: Timestamp;
@@ -27,22 +28,23 @@ type Student = {
   hasChosen?: boolean;
   uniquecode: string; // The field used for access/lookup
 };
+
 export default function YearbookPickerPage() {
   const [code, setCode] = useState('');
   const [student, setStudent] = useState<Student | null>(null);
-  // Stores the actual Firestore Document ID (the naturalKey) after a successful unique code lookup
   const [studentDocId, setStudentDocId] = useState<string | null>(null);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(''); // Simple success message state
+  const [success, setSuccess] = useState('');
+
   const fetchStudentData = async () => {
     setError('');
     setSuccess('');
     setStudent(null);
     setPhotos([]);
-    setStudentDocId(null); // Clear ID state
+    setStudentDocId(null);
     const trimmedCode = code.trim();
     if (!trimmedCode) {
       setError('Please enter a code.');
@@ -51,27 +53,23 @@ export default function YearbookPickerPage() {
     setLoading(true);
     try {
       const studentsRef = collection(db, 'students');
-      // 1. SECURE LOOKUP: Query the 'students' collection using the 'uniquecode' field
       const q = query(studentsRef, where('uniquecode', '==', trimmedCode));
       const querySnapshot = await getDocs(q);
       if (querySnapshot.empty) {
         setError('Invalid code.');
-        return; // Exit early if no match
+        return;
       }
-      // 2. Extract the actual Firestore Document ID (natural key)
       const studentSnap = querySnapshot.docs[0];
       const docId = studentSnap.id;
-      setStudentDocId(docId); // Store the actual ID for the secure update
+      setStudentDocId(docId);
       const studentData = studentSnap.data() as Student;
       setStudent(studentData);
-      // 3. Fetch the subcollection using the document snapshot reference
       const photosCol = collection(studentSnap.ref, 'photos');
       const photosSnap = await getDocs(photosCol);
       const photosList: Photo[] = photosSnap.docs
         .map((doc) => doc.data() as Photo)
         .sort((a, b) => a.timestamp.seconds - b.timestamp.seconds);
       setPhotos(photosList);
-      // Pre-select logic
       if (studentData.hasChosen && studentData.chosenPhotoUrl) {
         setSelected(studentData.chosenPhotoUrl);
       } else if (photosList.length > 0) {
@@ -84,16 +82,14 @@ export default function YearbookPickerPage() {
       setLoading(false);
     }
   };
+
   const handleConfirm = async () => {
-    // Ensure we have the retrieved Document ID (studentDocId) for the update
     if (!student || !selected || !studentDocId) return;
     setLoading(true);
     setError('');
     setSuccess('');
     try {
-      // Find the currently selected photo's metadata
       const chosenPhoto = photos.find((p) => p.url === selected);
-      // 4. CRITICAL STEP: Use the secure Document ID (studentDocId) for the direct update
       const studentRef = doc(db, 'students', studentDocId);
       await updateDoc(studentRef, {
         chosenPhotoUrl: selected,
@@ -102,7 +98,6 @@ export default function YearbookPickerPage() {
         choiceTimestamp: serverTimestamp(),
       });
       setSuccess('Photo confirmed!');
-      // Update local state
       setStudent((prevStudent) =>
         prevStudent
           ? {
@@ -120,10 +115,11 @@ export default function YearbookPickerPage() {
       setLoading(false);
     }
   };
+
   return (
     <div className="w-screen h-screen flex flex-col items-center overflow-hidden bg-gradient-to-b from-white to-zinc-50 p-6">
       <div
-        className="flex flex-col w-full p-4"
+        className="flex flex-col w-full p-3"
         style={{
           maxWidth: '1200px',
           gap: '24px',
@@ -132,7 +128,7 @@ export default function YearbookPickerPage() {
           height: '100%',
         }}
       >
-        {/* NEW 1-COLUMN HEADER ROW: Tino Ley Digital Photography / School Year */}
+        {/* Header */}
         <div className="w-full text-center pb-4">
           <h1 className="font-extrabold text-2xl md:text-3xl text-green-800">
             Tino Ley Digital Photography
@@ -141,14 +137,18 @@ export default function YearbookPickerPage() {
             International School Manila SY2025-2026
           </p>
         </div>
-        {/* EXISTING 2-COLUMN LAYOUT */}
-        <div className="flex flex-col md:flex-row" style={{ gap: '24px' }}>
+
+        {/* Main layout */}
+        <div
+          className="flex flex-col md:flex-row flex-1 overflow-hidden"
+          style={{ gap: '24px' }}
+        >
           {/* Left Column */}
-          <div className="flex-1 flex flex-col justify-center md:justify-start items-center md:items-start">
+          <div className="flex-1 flex flex-col justify-start items-center md:items-start overflow-auto p-2">
             <h2 className="font-extrabold text-center mx-auto md:mx-0 text-2x1 md:text-2xl mb-6 text-green-800">
               Yearbook Photo Selection Tool
             </h2>
-            {/* Student Welcome */}
+
             {student && (
               <div className="text-gray-700 mb-6 w-full border-2 rounded-2xl p-6 border-green-800">
                 <p className="text-lg font-medium mb-1">
@@ -174,10 +174,9 @@ export default function YearbookPickerPage() {
               </div>
             )}
 
-            {/* Selected Photo / Enter Code */}
             <div className="bg-white rounded-2xl flex flex-col items-center w-full relative p-3 border-2 border-green-800 shadow">
               {student && (
-                <h3 className="font-bold mb-3 text-green-800 text-lg md:text-xl md:mx-0 text-2x1 text-center p-1">
+                <h3 className="font-bold mb-3 text-green-800 text-lg md:text-xl text-center p-1">
                   Chosen Photo
                 </h3>
               )}
@@ -207,7 +206,6 @@ export default function YearbookPickerPage() {
                       'Submit'
                     )}
                   </button>
-                  {/* Simple inline messaging */}
                   {error && (
                     <p className="text-red-500 mt-2 flex items-center">
                       <XCircle className="w-4 h-4 mr-1" /> {error}
@@ -243,10 +241,10 @@ export default function YearbookPickerPage() {
               )}
             </div>
           </div>
-          {/* Right Column - Gallery + Confirm */}
+
+          {/* Right Column */}
           {student && (
-            <div className="flex-1 flex flex-col gap-6">
-              {/* Photo Gallery */}
+            <div className="flex-1 flex flex-col gap-6 overflow-auto p-2">
               <div className="bg-white rounded-2xl flex flex-col p-3 border-2 border-green-800 shadow">
                 <h3 className="font-bold mb-3 text-2x1 text-green-800 p-1">
                   Photo Gallery
@@ -254,8 +252,8 @@ export default function YearbookPickerPage() {
                 <div
                   className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3 place-items-center overflow-y-auto"
                   style={{
-                    maxHeight: '420px', // ✅ fits 6 photos (2 rows of ~210px each)
-                    paddingRight: '4px', // ✅ avoids scrollbar overlap
+                    maxHeight: '420px',
+                    paddingRight: '4px',
                   }}
                 >
                   {photos.map((photo) => {
@@ -287,7 +285,7 @@ export default function YearbookPickerPage() {
                   })}
                 </div>
               </div>
-              {/* Confirm Button */}
+
               <div className="bg-white rounded-2xl flex flex-col items-center justify-center p-6 border-2 border-green-800 shadow">
                 <p className="text-gray-700 font-semibold mb-3">
                   Your photo package comes with one photo for editing and
@@ -305,7 +303,7 @@ export default function YearbookPickerPage() {
                   )}
                 </button>
               </div>
-              {/* Simple inline messaging for confirmation step */}
+
               {error && (
                 <p className="text-red-500 mt-2 flex items-center">
                   <XCircle className="w-4 h-4 mr-1" /> {error}
