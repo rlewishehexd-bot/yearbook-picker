@@ -100,10 +100,10 @@ export default function YearbookPickerPage() {
         choiceTimestamp: serverTimestamp(),
       });
       setSuccess('Photo confirmed!');
-      setStudent((prev) =>
-        prev
+      setStudent((prevStudent) =>
+        prevStudent
           ? {
-              ...prev,
+              ...prevStudent,
               chosenPhotoUrl: selected,
               chosenPhotoName: chosenPhoto?.originalName ?? null,
               hasChosen: true,
@@ -164,11 +164,14 @@ export default function YearbookPickerPage() {
 
           {/* PHOTO GALLERY */}
           {student && (
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm max-w-[95%] self-center">
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col">
               <h3 className="font-bold text-green-800 text-lg mb-3 text-center">
                 Photo Gallery
               </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[400px] overflow-y-auto">
+              <div
+                className="grid grid-cols-2 sm:grid-cols-3 gap-3 overflow-y-auto pr-2"
+                style={{ maxHeight: '480px' }}
+              >
                 {photos.map((photo) => {
                   const isSelected = selected === photo.url;
                   return (
@@ -258,7 +261,7 @@ export default function YearbookPickerPage() {
             </div>
 
             {/* CONFIRM SECTION */}
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center justify-center">
+            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
               <p className="text-gray-700 font-semibold mb-3 text-center">
                 Your photo package comes with one photo for editing and
                 printing.
