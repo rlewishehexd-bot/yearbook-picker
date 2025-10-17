@@ -188,9 +188,9 @@ export default function YearbookPickerPage() {
           {student && (
             <div
               ref={galleryRef}
-              className={`border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm ${
+              className={`border-2 border-green-800 rounded-2xl p-4 pr-6 bg-white shadow-sm ${
                 photos.length > 6
-                  ? 'overflow-y-auto scrollbar-thin scrollbar-thumb-green-800 scrollbar-track-gray-200 scroll-smooth'
+                  ? 'overflow-y-auto scrollbar-thin scrollbar-thumb-green-800 scrollbar-track-gray-200 scroll-smooth rounded-lg'
                   : 'overflow-hidden'
               }`}
               style={{
