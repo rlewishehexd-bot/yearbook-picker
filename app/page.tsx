@@ -27,6 +27,7 @@ type Student = {
   chosenPhotoName?: string | null;
   hasChosen?: boolean;
   uniquecode: string;
+  initialChosenName?: string;
 };
 
 export default function YearbookPickerPage() {
@@ -94,11 +95,29 @@ export default function YearbookPickerPage() {
         .sort((a, b) => a.timestamp.seconds - b.timestamp.seconds);
       setPhotos(photosList);
 
+      // ✅ FIXED LOGIC: properly display chosen or initialChosen photo
+      let initialSelection: string | null = null;
+
+      // Case 1: student already confirmed choice
       if (studentData.hasChosen && studentData.chosenPhotoUrl) {
-        setSelected(studentData.chosenPhotoUrl);
-      } else if (photosList.length > 0) {
-        setSelected(photosList[0].url);
+        initialSelection = studentData.chosenPhotoUrl;
       }
+      // Case 2: no confirmed choice yet, but there’s an initialChosenName
+      else if (studentData.initialChosenName) {
+        const match = photosList.find(
+          (p) =>
+            p.originalName?.trim().toLowerCase() ===
+            studentData.initialChosenName?.trim().toLowerCase()
+        );
+        if (match) initialSelection = match.url;
+      }
+      // Case 3: fallback (show first photo)
+      else if (photosList.length > 0) {
+        initialSelection = photosList[0].url;
+      }
+
+      // Apply the result
+      setSelected(initialSelection);
     } catch (err) {
       console.error(err);
       setError('Error fetching data.');
