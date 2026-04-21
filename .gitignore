@@ -40,6 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+*firebase-adminsdk*.json
+
 node_modules
 .next
 .env.local
