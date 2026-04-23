@@ -107,7 +107,7 @@ export default function YearbookPickerPage() {
         const match = photosList.find(
           (p) =>
             p.originalName?.trim().toLowerCase() ===
-            studentData.initialChosenName?.trim().toLowerCase()
+            studentData.initialChosenName?.trim().toLowerCase(),
         );
         if (match) initialSelection = match.url;
       }
@@ -149,7 +149,7 @@ export default function YearbookPickerPage() {
               chosenPhotoName: chosenPhoto?.originalName ?? null,
               hasChosen: true,
             }
-          : null
+          : null,
       );
     } catch (err) {
       console.error(err);
@@ -176,7 +176,7 @@ export default function YearbookPickerPage() {
         <div className="flex justify-center w-full mt-6">
           <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center w-full max-w-md">
             <h2 className="font-extrabold text-green-800 text-xl md:text-2xl mb-3 text-center">
-              Yearbook Photo Selection Tool
+              Limitless Fundraiser Photo Selection Tool
             </h2>
             <input
               type="text"
