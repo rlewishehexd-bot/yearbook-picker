@@ -188,7 +188,7 @@ export default function YearbookPickerPage() {
               placeholder="Enter your code"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="border-2 border-woodrose-blue rounded-lg px-3 py-2 w-64 text-center focus:ring-2 border-woodrose-red focus-woodrose outline-none mb-3"
+              className="border-2 border-woodrose-blue rounded-lg px-3 py-2 w-64 text-center focus:ring-2 ring-[rgb(193,39,46)] focus-woodrose outline-none mb-3"
               onKeyDown={(e) => {
                 if (e.key === 'Enter') fetchStudentData();
               }}
@@ -256,7 +256,7 @@ export default function YearbookPickerPage() {
                   return (
                     <div
                       key={photo.url}
-                      className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 border-woodrose-red focus-woodrose ${
+                      className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-[rgb(193,39,46)] border-woodrose-red focus-woodrose ${
                         isSelected ? 'ring-offset-2' : 'hover:focus-woodrose'
                       } transition-all`}
                       onClick={() => setSelected(photo.url)}
@@ -287,7 +287,7 @@ export default function YearbookPickerPage() {
                 Chosen Photo
               </h3>
               {selected ? (
-                <div className="relative w-full max-w-xs aspect-[4/5] rounded-lg overflow-hidden ring-2 border-woodrose-red focus-woodrose">
+                <div className="relative w-full max-w-xs aspect-[4/5] rounded-lg overflow-hidden ring-2 ring-[rgb(193,39,46)] border-woodrose-red focus-woodrose">
                   <Image
                     src={selected}
                     alt="Chosen photo"
