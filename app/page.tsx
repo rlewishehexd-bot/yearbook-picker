@@ -303,8 +303,22 @@ export default function YearbookPickerPage() {
             {/* CONFIRM SECTION */}
             <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
               <p className="text-gray-700 font-semibold mb-3">
-                The school has chosen this as your photo. <br /> You can change
-                it by selecting a different one from the photo gallery.
+                <p>
+                  {student.initialChosenName && !student.hasChosen ? (
+                    <>
+                      The school has chosen this as your photo. <br /> You can
+                      change it by selecting a different one from the photo
+                      gallery.
+                    </>
+                  ) : student.hasChosen ? (
+                    <>
+                      This is your chosen photo. <br /> You can change it by
+                      selecting a different one from the photo gallery.
+                    </>
+                  ) : (
+                    'Please select a photo from the gallery.'
+                  )}
+                </p>
               </p>
               <button
                 onClick={handleConfirm}
