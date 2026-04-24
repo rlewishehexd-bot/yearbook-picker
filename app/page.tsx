@@ -178,8 +178,7 @@ export default function YearbookPickerPage() {
       {!student && (
         <div className="flex justify-center w-full mt-6">
           <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center w-full max-w-md">
-            <h2 className="font-extrabold woodrose-blue text-xl md:text-2xl mb-3 text-center">
-              Limitless Concert <br />
+            <h2 className="font-extrabold  woodrose-blue text-xl md:text-2xl mb-3 text-center">
               Photo Selection and Purchasing Tool
             </h2>
             <input
@@ -187,7 +186,7 @@ export default function YearbookPickerPage() {
               placeholder="Enter your code"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="border-2 border-woodrose-blue rounded-lg px-3 py-2 w-64 text-center focus:ring-2 focus:ring-green-600 outline-none mb-3"
+              className="border-2 border-woodrose-blue rounded-lg px-3 py-2 w-64 text-center focus:ring-2 focus-woodrose outline-none mb-3"
               onKeyDown={(e) => {
                 if (e.key === 'Enter') fetchStudentData();
               }}
@@ -260,8 +259,8 @@ export default function YearbookPickerPage() {
                   return (
                     <div
                       key={photo.url}
-                      className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-green-800 ${
-                        isSelected ? 'ring-offset-2' : 'hover:ring-green-800'
+                      className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 focus-woodrose ${
+                        isSelected ? 'ring-offset-2' : 'hover:focus-woodrose'
                       } transition-all`}
                       onClick={() => setSelected(photo.url)}
                     >
@@ -291,7 +290,7 @@ export default function YearbookPickerPage() {
                 Chosen Photo
               </h3>
               {selected ? (
-                <div className="relative w-full max-w-xs aspect-[4/5] rounded-lg overflow-hidden ring-2 ring-green-800">
+                <div className="relative w-full max-w-xs aspect-[4/5] rounded-lg overflow-hidden ring-2 focus-woodrose">
                   <Image
                     src={selected}
                     alt="Chosen photo"
