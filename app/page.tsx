@@ -229,7 +229,7 @@ export default function YearbookPickerPage() {
                 Welcome,{' '}
                 <span className="font-bold woodrose-blue">{student.name}</span>
               </p>
-              <p className="text-[1.25rem] font-semibold mt-1">
+              <p className="text-[1.25rem] text-gray-700 font-semibold mt-1">
                 This web application allows you to preview and change your
                 chosen photo. It also allows you to purchase digital copies.
               </p>
@@ -302,10 +302,9 @@ export default function YearbookPickerPage() {
 
             {/* CONFIRM SECTION */}
             <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
-              <p className="text-gray-700 font-semibold mb-3 text-center">
-                The school has this photo as your initially chosen photo. <br />{' '}
-                You may change it by selecting a different photo from the photo
-                gallery and setting it as your chosen photo.
+              <p className="text-gray-700 font-semibold mb-3">
+                The school has chosen this as your photo. <br /> You can change
+                it by selecting a different one from the photo gallery.
               </p>
               <button
                 onClick={handleConfirm}
@@ -316,7 +315,7 @@ export default function YearbookPickerPage() {
                 Set as Chosen Photo
               </button>
               {success && (
-                <p className="text-green-800 mt-2 flex items-center text-sm">
+                <p className="text-green-800 mt-2 flex items-center text-center text-sm">
                   <CheckCircle className="w-4 h-4 mr-1" /> {success}
                 </p>
               )}
