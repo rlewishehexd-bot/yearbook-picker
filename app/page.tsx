@@ -304,8 +304,8 @@ export default function YearbookPickerPage() {
             <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
               <p className="text-gray-700 font-semibold mb-3 text-center">
                 The school has this photo as your initially chosen photo. <br />{' '}
-                You may change it by selecting a different photo from gallery
-                and setting it as your chosen photo.
+                You may change it by selecting a different photo from the photo
+                gallery and setting it as your chosen photo.
               </p>
               <button
                 onClick={handleConfirm}
