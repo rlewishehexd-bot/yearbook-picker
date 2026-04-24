@@ -188,7 +188,7 @@ export default function YearbookPickerPage() {
               placeholder="Enter your code"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="border-2 border-woodrose-blue rounded-lg px-3 py-2 w-64 text-center focus:ring-2 ring-[rgb(193,39,46)] focus-woodrose outline-none mb-3"
+              className="border-2 border-woodrose-blue rounded-lg px-3 py-2 w-64 text-center focus:ring-2 ring-[rgb(46,48,146)] focus-woodrose outline-none mb-3"
               onKeyDown={(e) => {
                 if (e.key === 'Enter') fetchStudentData();
               }}
@@ -211,7 +211,7 @@ export default function YearbookPickerPage() {
               </p>
             )}
             {success && (
-              <p className="text-green-600 mt-2 flex items-center text-sm">
+              <p className="text-green-800 mt-2 flex items-center text-sm">
                 <CheckCircle className="w-4 h-4 mr-1" /> {success}
               </p>
             )}
@@ -225,20 +225,18 @@ export default function YearbookPickerPage() {
           {/* LEFT COLUMN */}
           <div className="flex flex-col gap-4">
             {/* WELCOME SECTION */}
-            <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm">
+            <div className="border-2 border-woodrose-blue rounded-2xl text-2xl p-4 bg-white shadow-sm">
               <p className="text-lg limitless-title">
                 Welcome,{' '}
                 <span className="font-bold woodrose-blue">
                   {student.firstName} {student.lastName}
                 </span>
               </p>
-              <p className="text-sm limitless-title font-semibold mt-1">
+              <p className="text-[1.2rem] limitless-title font-semibold mt-1">
                 This web application allows you to preview and change your
                 chosen photo. It also allows you to purchase digital copies.
               </p>
-              <ul className="list-disc list-inside text-sm mt-2">
-                <li></li>
-              </ul>
+              <ul className="list-disc list-inside text-sm mt-2"></ul>
             </div>
 
             {/* PHOTO GALLERY */}
@@ -256,7 +254,7 @@ export default function YearbookPickerPage() {
                   return (
                     <div
                       key={photo.url}
-                      className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-[rgb(193,39,46)] border-woodrose-red focus-woodrose ${
+                      className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-[rgb(46,48,146)] border-woodrose-red focus-woodrose ${
                         isSelected ? 'ring-offset-2' : 'hover:focus-woodrose'
                       } transition-all`}
                       onClick={() => setSelected(photo.url)}
@@ -287,7 +285,7 @@ export default function YearbookPickerPage() {
                 Chosen Photo
               </h3>
               {selected ? (
-                <div className="relative w-full max-w-xs aspect-[4/5] rounded-lg overflow-hidden ring-2 ring-[rgb(193,39,46)] border-woodrose-red focus-woodrose">
+                <div className="relative w-full max-w-xs aspect-[4/5] rounded-lg overflow-hidden ring-2 ring-[rgb(46,48,146)] border-woodrose-red focus-woodrose">
                   <Image
                     src={selected}
                     alt="Chosen photo"
@@ -320,7 +318,7 @@ export default function YearbookPickerPage() {
                 Set as Chosen Photo
               </button>
               {success && (
-                <p className="text-green-600 mt-2 flex items-center text-sm">
+                <p className="text-green-800 mt-2 flex items-center text-sm">
                   <CheckCircle className="w-4 h-4 mr-1" /> {success}
                 </p>
               )}
