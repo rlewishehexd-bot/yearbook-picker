@@ -42,13 +42,12 @@ export default function YearbookPickerPage() {
   const galleryRef = useRef<HTMLDivElement>(null);
   const [galleryHeight, setGalleryHeight] = useState<number>(0);
 
-  // Dynamically calculate gallery height based on card width
   useEffect(() => {
     const calculateHeight = () => {
       if (!galleryRef.current) return;
       const containerWidth = galleryRef.current.clientWidth;
       const columns = window.innerWidth >= 640 ? 3 : 2;
-      const gap = 12; // Tailwind gap-3 = 0.75rem
+      const gap = 12;
       const cardWidth = (containerWidth - gap * (columns - 1)) / columns;
       const cardHeight = (cardWidth * 5) / 4;
       const rows = 2;
@@ -94,28 +93,19 @@ export default function YearbookPickerPage() {
         .sort((a, b) => a.timestamp.seconds - b.timestamp.seconds);
       setPhotos(photosList);
 
-      // ✅ FIXED LOGIC: properly display chosen or initialChosen photo
       let initialSelection: string | null = null;
-
-      // Case 1: student already confirmed choice
       if (studentData.hasChosen && studentData.chosenPhotoUrl) {
         initialSelection = studentData.chosenPhotoUrl;
-      }
-      // Case 2: no confirmed choice yet, but there’s an initialChosenName
-      else if (studentData.initialChosenName) {
+      } else if (studentData.initialChosenName) {
         const match = photosList.find(
           (p) =>
             p.originalName?.trim().toLowerCase() ===
             studentData.initialChosenName?.trim().toLowerCase(),
         );
         if (match) initialSelection = match.url;
-      }
-      // Case 3: fallback (show first photo)
-      else if (photosList.length > 0) {
+      } else if (photosList.length > 0) {
         initialSelection = photosList[0].url;
       }
-
-      // Apply the result
       setSelected(initialSelection);
     } catch (err) {
       console.error(err);
@@ -159,7 +149,7 @@ export default function YearbookPickerPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6 flex flex-col items-center">
+    <div className="h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6 flex flex-col items-center overflow-hidden">
       {/* HEADER */}
       <header className="text-center mb-6 flex-shrink-0">
         <p className="limitless-title woodrose-blue text-5xl md:text-6xl font-semibold text-gray-700">
@@ -174,7 +164,7 @@ export default function YearbookPickerPage() {
       {!student && (
         <div className="flex justify-center w-full mt-6">
           <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center w-full max-w-md">
-            <h2 className="font-extrabold  woodrose-blue text-xl md:text-2xl mb-3 text-center">
+            <h2 className="font-extrabold woodrose-blue text-xl md:text-2xl mb-3 text-center">
               Photo Selection & Purchasing Tool
               <span className="font-normal text-[1.2rem]">
                 <br />
@@ -220,12 +210,11 @@ export default function YearbookPickerPage() {
 
       {/* SECOND VIEW: STUDENT DATA AND GALLERY */}
       {student && (
-        <div className="flex-1 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+        <div className="flex-1 w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch min-h-0">
           {/* LEFT COLUMN */}
-          <div className="flex flex-col gap-4">
-            {/* WELCOME SECTION */}
-            <div className="border-2 border-woodrose-blue rounded-2xl text-2xl p-4 bg-white shadow-sm">
-              <p className="font-bold woodrose-blue text-[2rem]">
+          <div className="flex flex-col gap-4 min-h-0">
+            <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm shrink-0">
+              <p className="font-bold woodrose-blue text-[2rem] leading-tight">
                 Welcome,{' '}
                 <span className="font-bold woodrose-blue">{student.name}</span>
               </p>
@@ -233,14 +222,11 @@ export default function YearbookPickerPage() {
                 This web application allows you to preview and change your
                 chosen photo. It also allows you to purchase digital copies.
               </p>
-              <ul className="list-disc list-inside text-sm mt-2"></ul>
             </div>
 
-            {/* PHOTO GALLERY */}
             <div
               ref={galleryRef}
-              className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm overflow-y-auto"
-              style={{ maxHeight: galleryHeight || 480 }}
+              className="flex-1 border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm overflow-y-auto"
             >
               <h3 className="font-bold woodrose-blue text-lg mb-3">
                 Photo Gallery
@@ -272,17 +258,31 @@ export default function YearbookPickerPage() {
                 })}
               </div>
             </div>
+
+            {/* RESTORED DOWNLOAD/PURCHASE ISLAND */}
+            <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center shrink-0">
+              <h3 className="font-bold woodrose-blue text-lg mb-2">
+                Digital Downloads
+              </h3>
+              <div className="flex flex-wrap gap-3 w-full justify-center">
+                <button className="bg-woodrose-blue text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition flex-1 text-center text-sm">
+                  Purchase Digital Copies
+                </button>
+                <button className="bg-woodrose-blue text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition flex-1 text-center text-sm">
+                  Download Photos
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* RIGHT COLUMN */}
-          <div className="flex flex-col gap-4">
-            {/* CHOSEN PHOTO */}
-            <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
+          <div className="flex flex-col gap-4 min-h-0">
+            <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center shrink-0">
               <h3 className="font-bold woodrose-blue text-lg mb-2">
                 Chosen Photo
               </h3>
               {selected ? (
-                <div className="relative w-full max-w-xs aspect-[4/5] rounded-lg overflow-hidden ring-2 ring-[rgb(46,48,146)]">
+                <div className="relative w-full max-w-[280px] aspect-[4/5] rounded-lg overflow-hidden ring-2 ring-[rgb(46,48,146)]">
                   <Image
                     src={selected}
                     alt="Chosen photo"
@@ -294,15 +294,14 @@ export default function YearbookPickerPage() {
                   </div>
                 </div>
               ) : (
-                <div className="w-full max-w-xs aspect-[4/5] flex items-center justify-center text-gray-600 border border-dashed border-woodrose-blue rounded-lg">
+                <div className="w-full max-w-[280px] aspect-[4/5] flex items-center justify-center text-gray-600 border border-dashed border-woodrose-blue rounded-lg">
                   No Photo Selected
                 </div>
               )}
             </div>
 
-            {/* CONFIRM SECTION */}
-            <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
-              <p className="text-gray-700 font-semibold mb-3">
+            <div className="flex-grow border-2 border-woodrose-blue rounded-2xl p-6 bg-white shadow-sm flex flex-col items-center justify-center">
+              <div className="text-gray-700 font-semibold mb-6 text-center text-[1.1rem]">
                 <p>
                   {student.initialChosenName && !student.hasChosen ? (
                     <>
@@ -319,17 +318,17 @@ export default function YearbookPickerPage() {
                     'Please select a photo from the gallery.'
                   )}
                 </p>
-              </p>
+              </div>
               <button
                 onClick={handleConfirm}
-                className="bg-woodrose-blue text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
+                className="bg-woodrose-blue text-white px-10 py-3 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
                 disabled={!selected || loading}
               >
                 {loading && <Loader2 className="w-5 h-5 animate-spin mr-2" />}
                 Set as Chosen Photo
               </button>
               {success && (
-                <p className="text-green-800 mt-2 flex items-center text-center text-sm">
+                <p className="text-green-800 mt-4 flex items-center text-center text-sm">
                   <CheckCircle className="w-4 h-4 mr-1" /> {success}
                 </p>
               )}
