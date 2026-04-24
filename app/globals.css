@@ -1,5 +1,36 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400..900&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+.limitless-title {
+  font-family: 'Great Vibes', cursive;
+}
+
+.limitless-subtitle {
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+  /* Cinzel is an all-caps/small-caps font */
+}
+
+.woodrose-blue {
+  color: rgb(46, 48, 146);
+}
+
+.bg-woodrose-blue {
+  background-color: rgb(46, 48, 146);
+}
+
+.border-woodrose-blue {
+  border-color: rgb(46, 48, 146);
+}
+
+.border-woodrose-red {
+  border-color: rgb(193, 39, 46, 0.75);
+}
+
+.woodrose-red {
+  color: rgb(193, 39, 46);
+}
 
 @custom-variant dark (&:is(.dark *));
 

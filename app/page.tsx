@@ -163,27 +163,31 @@ export default function YearbookPickerPage() {
     <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6 flex flex-col items-center">
       {/* HEADER */}
       <header className="text-center mb-6 flex-shrink-0">
-        <h1 className="font-extrabold text-2xl md:text-3xl text-green-800">
+        <h1 className="font-extrabold text-2xl md:text-3xl woodrose-blue">
           Tino Ley Digital Photography
         </h1>
-        <p className="text-lg md:text-xl font-semibold text-gray-700">
-          PAREF WOODROSE & ROSEMONT
+        <p className="limitless-title woodrose-blue text-lg md:text-4xl font-semibold text-gray-700">
+          Limitless
+        </p>
+        <p className="limitless-subtitle woodrose-red font-bold">
+          A Celebration of Dreamers and Believers
         </p>
       </header>
 
       {/* FIRST VIEW: INPUT BOX */}
       {!student && (
         <div className="flex justify-center w-full mt-6">
-          <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center w-full max-w-md">
-            <h2 className="font-extrabold text-green-800 text-xl md:text-2xl mb-3 text-center">
-              Limitless Fundraiser Photo Selection Tool
+          <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center w-full max-w-md">
+            <h2 className="font-extrabold woodrose-blue text-xl md:text-2xl mb-3 text-center">
+              Limitless Concert <br />
+              Photo Selection and Purchasing Tool
             </h2>
             <input
               type="text"
               placeholder="Enter your code"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="border-2 border-green-800 rounded-lg px-3 py-2 w-64 text-center focus:ring-2 focus:ring-green-600 outline-none mb-3"
+              className="border-2 border-woodrose-blue rounded-lg px-3 py-2 w-64 text-center focus:ring-2 focus:ring-green-600 outline-none mb-3"
               onKeyDown={(e) => {
                 if (e.key === 'Enter') fetchStudentData();
               }}
@@ -192,7 +196,7 @@ export default function YearbookPickerPage() {
             />
             <button
               onClick={fetchStudentData}
-              className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50"
+              className="bg-woodrose-blue text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50"
               disabled={loading || !code}
             >
               {loading && (
@@ -220,10 +224,10 @@ export default function YearbookPickerPage() {
           {/* LEFT COLUMN */}
           <div className="flex flex-col gap-4">
             {/* WELCOME SECTION */}
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm">
+            <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm">
               <p className="text-lg">
                 Welcome,{' '}
-                <span className="font-bold text-green-800">
+                <span className="font-bold woodrose-blue">
                   {student.firstName} {student.lastName}
                 </span>
               </p>
@@ -244,10 +248,10 @@ export default function YearbookPickerPage() {
             {/* PHOTO GALLERY */}
             <div
               ref={galleryRef}
-              className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm overflow-y-auto"
+              className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm overflow-y-auto"
               style={{ maxHeight: galleryHeight || 480 }}
             >
-              <h3 className="font-bold text-green-800 text-lg mb-3">
+              <h3 className="font-bold woodrose-blue text-lg mb-3">
                 Photo Gallery
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -269,7 +273,7 @@ export default function YearbookPickerPage() {
                       />
                       {isSelected && (
                         <div className="absolute top-1 right-1 bg-white rounded-full p-1">
-                          <CheckCircle className="w-5 h-5 text-green-800" />
+                          <CheckCircle className="w-5 h-5 woodrose-blue" />
                         </div>
                       )}
                     </div>
@@ -282,8 +286,8 @@ export default function YearbookPickerPage() {
           {/* RIGHT COLUMN */}
           <div className="flex flex-col gap-4">
             {/* CHOSEN PHOTO */}
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
-              <h3 className="font-bold text-green-800 text-lg mb-2">
+            <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
+              <h3 className="font-bold woodrose-blue text-lg mb-2">
                 Chosen Photo
               </h3>
               {selected ? (
@@ -295,25 +299,25 @@ export default function YearbookPickerPage() {
                     style={{ objectFit: 'cover' }}
                   />
                   <div className="absolute top-1 right-1 bg-white rounded-full p-1">
-                    <CheckCircle className="w-6 h-6 text-green-800" />
+                    <CheckCircle className="w-6 h-6 woodrose-blue" />
                   </div>
                 </div>
               ) : (
-                <div className="w-full max-w-xs aspect-[4/5] flex items-center justify-center text-gray-600 border border-dashed border-green-800 rounded-lg">
+                <div className="w-full max-w-xs aspect-[4/5] flex items-center justify-center text-gray-600 border border-dashed border-woodrose-blue rounded-lg">
                   No Photo Selected
                 </div>
               )}
             </div>
 
             {/* CONFIRM SECTION */}
-            <div className="border-2 border-green-800 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
+            <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
               <p className="text-gray-700 font-semibold mb-3 text-center">
                 Your photo package comes with one photo for editing and
                 printing.
               </p>
               <button
                 onClick={handleConfirm}
-                className="bg-green-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
+                className="bg-woodrose-blue text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
                 disabled={!selected || loading}
               >
                 {loading && <Loader2 className="w-5 h-5 animate-spin mr-2" />}
