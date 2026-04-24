@@ -162,10 +162,10 @@ export default function YearbookPickerPage() {
     <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6 flex flex-col items-center">
       {/* HEADER */}
       <header className="text-center mb-6 flex-shrink-0">
-        <p className="limitless-title woodrose-blue text-lg md:text-6xl font-semibold text-gray-700">
+        <p className="limitless-title woodrose-blue text-5xl md:text-6xl font-semibold text-gray-700">
           Limitless
         </p>
-        <p className="limitless-subtitle woodrose-red font-bold">
+        <p className="limitless-subtitle text-sm md:text-base woodrose-red font-bold">
           A Celebration of Dreamers and Believers
         </p>
       </header>
