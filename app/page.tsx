@@ -21,8 +21,7 @@ type Photo = {
 };
 
 type Student = {
-  firstName: string;
-  lastName: string;
+  name: string;
   chosenPhotoUrl?: string;
   chosenPhotoName?: string | null;
   hasChosen?: boolean;
@@ -226,13 +225,11 @@ export default function YearbookPickerPage() {
           <div className="flex flex-col gap-4">
             {/* WELCOME SECTION */}
             <div className="border-2 border-woodrose-blue rounded-2xl text-2xl p-4 bg-white shadow-sm">
-              <p className="text-[3rem]">
+              <p className="text-[2rem]">
                 Welcome,{' '}
-                <span className="font-bold woodrose-blue">
-                  {student.firstName} {student.lastName}
-                </span>
+                <span className="font-bold woodrose-blue">{student.name}</span>
               </p>
-              <p className="text-[1.5rem] font-semibold mt-1">
+              <p className="text-[1.25rem] font-semibold mt-1">
                 This web application allows you to preview and change your
                 chosen photo. It also allows you to purchase digital copies.
               </p>
