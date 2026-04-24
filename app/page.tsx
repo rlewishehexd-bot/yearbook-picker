@@ -225,7 +225,7 @@ export default function YearbookPickerPage() {
           <div className="flex flex-col gap-4">
             {/* WELCOME SECTION */}
             <div className="border-2 border-woodrose-blue rounded-2xl text-2xl p-4 bg-white shadow-sm">
-              <p className="text-[2rem]">
+              <p className="font-bold woodrose-blue text-[2rem]">
                 Welcome,{' '}
                 <span className="font-bold woodrose-blue">{student.name}</span>
               </p>
@@ -303,8 +303,9 @@ export default function YearbookPickerPage() {
             {/* CONFIRM SECTION */}
             <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
               <p className="text-gray-700 font-semibold mb-3 text-center">
-                Your photo package comes with one photo for editing and
-                printing.
+                The school has this photo as your initially chosen photo. <br />{' '}
+                You may change it by selecting a different photo from gallery
+                and setting it as your chosen photo.
               </p>
               <button
                 onClick={handleConfirm}
