@@ -163,10 +163,7 @@ export default function YearbookPickerPage() {
     <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6 flex flex-col items-center">
       {/* HEADER */}
       <header className="text-center mb-6 flex-shrink-0">
-        <h1 className="font-extrabold text-2xl md:text-3xl woodrose-blue">
-          Tino Ley Digital Photography
-        </h1>
-        <p className="limitless-title woodrose-blue text-lg md:text-4xl font-semibold text-gray-700">
+        <p className="limitless-title woodrose-blue text-lg md:text-6xl font-semibold text-gray-700">
           Limitless
         </p>
         <p className="limitless-subtitle woodrose-red font-bold">
@@ -179,8 +176,13 @@ export default function YearbookPickerPage() {
         <div className="flex justify-center w-full mt-6">
           <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center w-full max-w-md">
             <h2 className="font-extrabold  woodrose-blue text-xl md:text-2xl mb-3 text-center">
-              Photo Selection and Purchasing Tool
+              Photo Selection & Purchasing Tool
+              <span className="font-normal text-[1.2rem]">
+                <br />
+                by Tino Ley Digital Photography
+              </span>
             </h2>
+
             <input
               type="text"
               placeholder="Enter your code"
