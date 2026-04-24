@@ -243,7 +243,7 @@ export default function YearbookPickerPage() {
               style={{ maxHeight: galleryHeight || 480 }}
             >
               <h3 className="font-bold woodrose-blue text-lg mb-3">
-                `` Photo Gallery
+                Photo Gallery
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {photos.map((photo) => {
