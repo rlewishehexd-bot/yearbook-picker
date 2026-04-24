@@ -196,7 +196,7 @@ export default function YearbookPickerPage() {
             />
             <button
               onClick={fetchStudentData}
-              className="bg-woodrose-blue text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50"
+              className="bg-woodrose-blue text-white px-6 py-2 rounded-full font-semibold transition disabled:opacity-50"
               disabled={loading || !code}
             >
               {loading && (
@@ -243,7 +243,7 @@ export default function YearbookPickerPage() {
               style={{ maxHeight: galleryHeight || 480 }}
             >
               <h3 className="font-bold woodrose-blue text-lg mb-3">
-                Photo Gallery
+                `` Photo Gallery
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {photos.map((photo) => {
@@ -251,7 +251,7 @@ export default function YearbookPickerPage() {
                   return (
                     <div
                       key={photo.url}
-                      className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-[rgb(46,48,146)] border-woodrose-red focus-woodrose ${
+                      className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-[rgb(46,48,146)] ${
                         isSelected ? 'ring-offset-2' : 'hover:focus-woodrose'
                       } transition-all`}
                       onClick={() => setSelected(photo.url)}
@@ -282,7 +282,7 @@ export default function YearbookPickerPage() {
                 Chosen Photo
               </h3>
               {selected ? (
-                <div className="relative w-full max-w-xs aspect-[4/5] rounded-lg overflow-hidden ring-2 ring-[rgb(46,48,146)] border-woodrose-red focus-woodrose">
+                <div className="relative w-full max-w-xs aspect-[4/5] rounded-lg overflow-hidden ring-2 ring-[rgb(46,48,146)]">
                   <Image
                     src={selected}
                     alt="Chosen photo"
