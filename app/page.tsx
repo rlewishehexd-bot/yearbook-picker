@@ -27,7 +27,7 @@ type Student = {
   hasChosen?: boolean;
   uniquecode: string;
   initialChosenName?: string;
-   hasPurchased?: boolean;
+  hasPurchased?: boolean;
 };
 
 export default function YearbookPickerPage() {
@@ -37,6 +37,7 @@ export default function YearbookPickerPage() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [purchaseLoading, setPurchaseLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -63,7 +64,7 @@ export default function YearbookPickerPage() {
   }, []);
 
 
-const fetchStudentData = async (overrideCode?: string) => {
+  const fetchStudentData = async (overrideCode?: string) => {
     setError('');
     setSuccess('');
     setStudent(null);
@@ -127,7 +128,7 @@ const fetchStudentData = async (overrideCode?: string) => {
     }
   };
 
-useEffect(() => {
+ useEffect(() => {
   const params = new URLSearchParams(window.location.search);
   const urlCode = params.get('code');
   const payment = params.get('payment');
@@ -136,11 +137,13 @@ useEffect(() => {
     setCode(urlCode);
     if (payment === 'success') {
       setSuccess('Payment successful! You can now download your photos.');
+    } else if (payment === 'cancelled') {
+      setError('Payment was cancelled. You can try again.');
     }
     fetchStudentData(urlCode);
   }
 }, []);
-  
+
 
   const handleConfirm = async () => {
     if (!student || !selected || !studentDocId) return;
@@ -160,11 +163,11 @@ useEffect(() => {
       setStudent((prevStudent) =>
         prevStudent
           ? {
-              ...prevStudent,
-              chosenPhotoUrl: selected,
-              chosenPhotoName: chosenPhoto?.originalName ?? null,
-              hasChosen: true,
-            }
+            ...prevStudent,
+            chosenPhotoUrl: selected,
+            chosenPhotoName: chosenPhoto?.originalName ?? null,
+            hasChosen: true,
+          }
           : null,
       );
     } catch (err) {
@@ -175,58 +178,52 @@ useEffect(() => {
     }
   };
 
-const handlePurchase = async () => {
-  if (!student || !studentDocId) return;
-  setLoading(true);
-  try {
-    const response = await fetch('/api/create-checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        uniquecode: student.uniquecode,
-        studentName: student.name,
-      }),
-    });
-    const data = await response.json();
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      setError('Failed to create checkout. Please try again.');
+  const handlePurchase = async () => {
+    if (!student || !studentDocId) return;
+    setPurchaseLoading(true);
+    try {
+      const response = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uniquecode: student.uniquecode,
+          studentName: student.name,
+        }),
+      });
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setError('Failed to create checkout. Please try again.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong.');
+    } finally {
+      setPurchaseLoading(false);
     }
-  } catch (err) {
-    console.error(err);
-    setError('Something went wrong.');
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
-const handleDownload = async () => {
-  if (!student) return;
-  setLoading(true);
-  try {
-    const response = await fetch(`/api/download?code=${student.uniquecode}`);
-    const data = await response.json();
-    if (data.files) {
-      for (const file of data.files) {
+  const handleSingleDownload = async (fileName: string) => {
+    if (!student || !student.hasPurchased) return;
+    try {
+      const response = await fetch(`/api/download?code=${student.uniquecode}&photo=${fileName}`);
+      const data = await response.json();
+      if (data.url) {
         const link = document.createElement('a');
-        link.href = file.url;
-        link.download = file.fileName;
+        link.href = data.url;
+        link.download = fileName;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        await new Promise((resolve) => setTimeout(resolve, 500));
+      } else {
+        setError('Failed to get download link.');
       }
-    } else {
-      setError('Failed to get download links.');
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong.');
     }
-  } catch (err) {
-    console.error(err);
-    setError('Something went wrong.');
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6 flex flex-col items-center">
@@ -319,62 +316,59 @@ const handleDownload = async () => {
                 {photos.map((photo) => {
                   const isSelected = selected === photo.url;
                   return (
-                    <div
-                      key={photo.url}
-                      className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-[rgb(46,48,146)] ${
-                        isSelected ? 'ring-offset-2' : 'hover:focus-woodrose'
-                      } transition-all`}
-                      onClick={() => setSelected(photo.url)}
-                    >
-                      <Image
-                        src={photo.url}
-                        alt="photo"
-                        fill
-                        style={{ objectFit: 'cover', borderRadius: '0.5rem' }}
-                      />
-                      {isSelected && (
-                        <div className="absolute top-1 right-1 bg-white rounded-full p-1">
-                          <CheckCircle className="w-5 h-5 woodrose-blue" />
-                        </div>
-                      )}
+                    <div key={photo.url} className="flex flex-col gap-1">
+                      <div
+                        className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-[rgb(46,48,146)] ${isSelected ? 'ring-offset-2' : 'hover:focus-woodrose'
+                          } transition-all`}
+                        onClick={() => setSelected(photo.url)}
+                      >
+                        <Image
+                          src={photo.url}
+                          alt="photo"
+                          fill
+                          style={{ objectFit: 'cover', borderRadius: '0.5rem' }}
+                        />
+                        {isSelected && (
+                          <div className="absolute top-1 right-1 bg-white rounded-full p-1">
+                            <CheckCircle className="w-5 h-5 woodrose-blue" />
+                          </div>
+                        )}
+                      </div>
+                      <button
+                        className={`w-full py-2 md:py-1 rounded-full text-sm md:text-xs font-semibold text-white transition ${student.hasPurchased
+                          ? 'bg-woodrose-blue cursor-pointer'
+                          : 'bg-gray-400 cursor-not-allowed'
+                          }`}
+                        disabled={!student.hasPurchased}
+                        onClick={() => handleSingleDownload(photo.originalName)}
+                      >
+                        Download
+                      </button>
                     </div>
                   );
                 })}
               </div>
             </div>
 
-{/* PURCHASE / DOWNLOAD SECTION */}
-{/* PURCHASE / DOWNLOAD SECTION */}
-<div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center gap-3">
-  <p className="text-gray-700 font-semibold text-center">
-    You may opt to purchase your high-resolution photos. <br />
-    It costs ₱250.00
-  </p>
-  <div className="flex w-full gap-3">
-    <button
-      className={`flex-1 py-2 rounded-full font-semibold text-white transition ${
-        student.hasPurchased
-          ? 'bg-gray-400 cursor-not-allowed'
-          : 'bg-woodrose-blue cursor-pointer'
-      }`}
-      disabled={!!student.hasPurchased}
-      onClick={() => handlePurchase()}
-    >
-      Purchase Digital Copies
-    </button>
-    <button
-      className={`flex-1 py-2 rounded-full font-semibold text-white transition ${
-        student.hasPurchased
-          ? 'bg-woodrose-blue cursor-pointer'
-          : 'bg-gray-400 cursor-not-allowed'
-      }`}
-      disabled={!student.hasPurchased}
-      onClick={() => handleDownload()}
-    >
-      Download
-    </button>
-  </div>
-</div>
+
+            {/* PURCHASE / DOWNLOAD SECTION */}
+            <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center gap-3">
+              <p className="text-gray-700 font-semibold text-center">
+                You may opt to purchase your high-resolution photos. <br />
+                It costs ₱250.00
+              </p>
+              <button
+                className={`flex-1 py-2 rounded-full font-semibold text-white transition ${student.hasPurchased
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-woodrose-blue cursor-pointer'
+                  }`}
+                disabled={!!student.hasPurchased || purchaseLoading}
+                onClick={() => handlePurchase()}
+              >
+                {purchaseLoading && <Loader2 className="w-4 h-4 animate-spin inline-block mr-2" />}
+                Purchase Digital Copies
+              </button>
+            </div>
           </div>
 
 
@@ -408,22 +402,22 @@ const handleDownload = async () => {
             {/* CONFIRM SECTION */}
             <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
               <p className="text-gray-700 font-semibold mb-3">
-                
-                  {student.initialChosenName && !student.hasChosen ? (
-                    <>
-                      The school has chosen this as your photo. <br /> You can
-                      change it by selecting a different one from the photo
-                      gallery.
-                    </>
-                  ) : student.hasChosen ? (
-                    <>
-                      This is your chosen photo. <br /> You can change it by
-                      selecting a different one from the photo gallery.
-                    </>
-                  ) : (
-                    'Please select a photo from the gallery.'
-                  )}
-                
+
+                {student.initialChosenName && !student.hasChosen ? (
+                  <>
+                    The school has chosen this as your photo. <br /> You can
+                    change it by selecting a different one from the photo
+                    gallery.
+                  </>
+                ) : student.hasChosen ? (
+                  <>
+                    This is your chosen photo. <br /> You can change it by
+                    selecting a different one from the photo gallery.
+                  </>
+                ) : (
+                  'Please select a photo from the gallery.'
+                )}
+
               </p>
               <button
                 onClick={handleConfirm}

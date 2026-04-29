@@ -3,7 +3,6 @@ import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import B2 from 'backblaze-b2';
 
-// Initialize Firebase Admin
 if (!getApps().length) {
   initializeApp({
     credential: cert({
@@ -20,12 +19,12 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const uniquecode = searchParams.get('code');
+    const photo = searchParams.get('photo');
 
-    if (!uniquecode) {
-      return NextResponse.json({ error: 'Missing code.' }, { status: 400 });
+    if (!uniquecode || !photo) {
+      return NextResponse.json({ error: 'Missing code or photo.' }, { status: 400 });
     }
 
-    // Find student
     const studentsRef = db.collection('students');
     const snapshot = await studentsRef.where('uniquecode', '==', uniquecode).get();
 
@@ -42,7 +41,6 @@ export async function GET(req: NextRequest) {
 
     const sanitizedName = studentData.sanitizedName;
 
-    // Authenticate with B2
     const b2 = new B2({
       applicationKeyId: process.env.B2_KEY_ID!,
       applicationKey: process.env.B2_APP_KEY!,
@@ -51,40 +49,17 @@ export async function GET(req: NextRequest) {
     const authResult = await b2.authorize();
     const downloadUrl = authResult.data.downloadUrl;
 
-    // List files under student's folder
-    const prefix = `limitless-concert/${sanitizedName}/`;
-const listResponse = await b2.listFileNames({
-  bucketId: process.env.B2_HIGHRES_BUCKET_ID!,
-  prefix,
-  maxFileCount: 50,
-  startFileName: '',
-  delimiter: '',
-});
+    const fileName = `limitless-concert/${sanitizedName}/${photo}`;
 
-    const files = listResponse.data.files;
+    const authResponse = await b2.getDownloadAuthorization({
+      bucketId: process.env.B2_HIGHRES_BUCKET_ID!,
+      fileNamePrefix: fileName,
+      validDurationInSeconds: 3600,
+    });
 
-    if (!files || files.length === 0) {
-      return NextResponse.json({ error: 'No files found.' }, { status: 404 });
-    }
+    const signedUrl = `${downloadUrl}/file/${process.env.B2_HIGHRES_BUCKET_NAME}/${fileName}?Authorization=${authResponse.data.authorizationToken}`;
 
-    // Generate signed URLs for each file
-    const signedUrls = await Promise.all(
-      files.map(async (file: { fileId: string; fileName: string }) => {
-        const authResponse = await b2.getDownloadAuthorization({
-          bucketId: process.env.B2_HIGHRES_BUCKET_ID!,
-          fileNamePrefix: file.fileName,
-          validDurationInSeconds: 3600,
-        });
-        const signedUrl = `${downloadUrl}/file/${process.env.B2_HIGHRES_BUCKET_NAME}/${file.fileName}?Authorization=${authResponse.data.authorizationToken}`;
-
-        return {
-          url: signedUrl,
-          fileName: file.fileName.split('/').pop(),
-        };
-      })
-    );
-
-    return NextResponse.json({ files: signedUrls });
+    return NextResponse.json({ url: signedUrl, fileName: photo });
 
   } catch (err) {
     console.error(err);
