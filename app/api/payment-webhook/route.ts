@@ -17,13 +17,25 @@ if (!getApps().length) {
 const db = getFirestore();
 
 function verifyWebhookSignature(payload: string, signature: string, secret: string): boolean {
+  if (!signature || !secret) return false;
+
   const parts = signature.split(',');
-  const ts = parts[0].replace('t=', '');
-  const hash = parts[1].replace('te=', '').replace('li=', '');
+  // Find the timestamp (t=)
+  const tsPart = parts.find(p => p.startsWith('t='));
+  // Find the signature (te= for test, li= for live)
+  const sigPart = parts.find(p => p.startsWith('te=') || p.startsWith('li='));
+
+  if (!tsPart || !sigPart) return false;
+
+  const ts = tsPart.split('=')[1];
+  const hash = sigPart.split('=')[1];
+  
+  // Paymongo requires: timestamp + "." + payload
+  const signatureBase = `${ts}.${payload}`;
   
   const expectedHash = crypto
     .createHmac('sha256', secret)
-    .update(`${ts}${payload}`)  // ← no dot between ts and payload
+    .update(signatureBase)
     .digest('hex');
     
   return hash === expectedHash;
