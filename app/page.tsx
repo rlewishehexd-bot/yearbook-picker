@@ -354,6 +354,7 @@ export default function YearbookPickerPage() {
             <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center gap-3">
               <p className="text-gray-700 font-semibold text-center">
                 You may opt to purchase your high-resolution photos. <br />
+                After you have successfully paid, the download links will become available <br />
                 It costs ₱250.00
               </p>
               <button
