@@ -17,13 +17,16 @@ if (!getApps().length) {
 const db = getFirestore();
 
 function verifyWebhookSignature(payload: string, signature: string, secret: string): boolean {
-  const [timestamp, hash] = signature.split(',');
-  const ts = timestamp.replace('t=', '');
+  const parts = signature.split(',');
+  const ts = parts[0].replace('t=', '');
+  const hash = parts[1].replace('te=', '').replace('li=', '');
+  
   const expectedHash = crypto
     .createHmac('sha256', secret)
-    .update(`${ts}.${payload}`)
+    .update(`${ts}${payload}`)  // ← no dot between ts and payload
     .digest('hex');
-  return hash.replace('li=', '') === expectedHash;
+    
+  return hash === expectedHash;
 }
 
 export async function POST(req: NextRequest) {
@@ -32,9 +35,9 @@ export async function POST(req: NextRequest) {
     const signature = req.headers.get('paymongo-signature') || '';
     const webhookSecret = process.env.PAYMONGO_WEBHOOK_SECRET || '';
 
-   // if (!verifyWebhookSignature(rawBody, signature, webhookSecret)) {
-    //  return NextResponse.json({ error: 'Invalid signature.' }, { status: 401 });
-   // }
+    if (!verifyWebhookSignature(rawBody, signature, webhookSecret)) {
+      return NextResponse.json({ error: 'Invalid signature.' }, { status: 401 });
+    }
 
     const event = JSON.parse(rawBody);
 const eventType = event.data.attributes.type;
