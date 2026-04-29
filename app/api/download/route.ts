@@ -55,9 +55,10 @@ export async function GET(req: NextRequest) {
       bucketId: process.env.B2_HIGHRES_BUCKET_ID!,
       fileNamePrefix: fileName,
       validDurationInSeconds: 3600,
+      b2ContentDisposition: `attachment; filename="${photo}"`,
     });
 
-    const signedUrl = `${downloadUrl}/file/${process.env.B2_HIGHRES_BUCKET_NAME}/${fileName}?Authorization=${authResponse.data.authorizationToken}`;
+    const signedUrl = `${downloadUrl}/file/${process.env.B2_HIGHRES_BUCKET_NAME}/${fileName}?Authorization=${authResponse.data.authorizationToken}&b2ContentDisposition=${encodeURIComponent(`attachment; filename="${photo}"`)}`;
 
     return NextResponse.json({ url: signedUrl, fileName: photo });
 

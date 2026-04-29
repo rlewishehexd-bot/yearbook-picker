@@ -128,21 +128,21 @@ export default function YearbookPickerPage() {
     }
   };
 
- useEffect(() => {
-  const params = new URLSearchParams(window.location.search);
-  const urlCode = params.get('code');
-  const payment = params.get('payment');
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlCode = params.get('code');
+    const payment = params.get('payment');
 
-  if (urlCode) {
-    setCode(urlCode);
-    if (payment === 'success') {
-      setSuccess('Payment successful! You can now download your photos.');
-    } else if (payment === 'cancelled') {
-      setError('Payment was cancelled. You can try again.');
+    if (urlCode) {
+      setCode(urlCode);
+      if (payment === 'success') {
+        setSuccess('Payment successful! You can now download your photos.');
+      } else if (payment === 'cancelled') {
+        setError('Payment was cancelled. You can try again.');
+      }
+      fetchStudentData(urlCode);
     }
-    fetchStudentData(urlCode);
-  }
-}, []);
+  }, []);
 
 
   const handleConfirm = async () => {
@@ -209,10 +209,11 @@ export default function YearbookPickerPage() {
     try {
       const response = await fetch(`/api/download?code=${student.uniquecode}&photo=${fileName}`);
       const data = await response.json();
+
       if (data.url) {
         const link = document.createElement('a');
         link.href = data.url;
-        link.download = fileName;
+        // The browser will now respect this because of the backend header
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
