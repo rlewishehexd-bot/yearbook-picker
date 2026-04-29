@@ -33,17 +33,17 @@ export async function POST(req: NextRequest) {
     const webhookSecret = process.env.PAYMONGO_WEBHOOK_SECRET || '';
 
    // if (!verifyWebhookSignature(rawBody, signature, webhookSecret)) {
-   //   return NextResponse.json({ error: 'Invalid signature.' }, { status: 401 });
+    //  return NextResponse.json({ error: 'Invalid signature.' }, { status: 401 });
    // }
 
     const event = JSON.parse(rawBody);
-const eventType = event.data.type;
+const eventType = event.data.attributes.type;
 
    if (eventType !== 'checkout_session.payment.paid') {
       return NextResponse.json({ received: true });
     }
 
-    const uniquecode = event.data.attributes.metadata?.uniquecode;
+    const uniquecode = event.data.attributes.data.attributes.metadata?.uniquecode;
 
     if (!uniquecode) {
       return NextResponse.json({ error: 'Missing uniquecode in metadata.' }, { status: 400 });
