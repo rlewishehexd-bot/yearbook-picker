@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
                 quantity: 1,
               },
             ],
-            payment_method_types: ['qrph'],
+            payment_method_types: ['qrph', 'card', 'gcash'],
             success_url: `${appUrl}?code=${uniquecode}&payment=success`,
             cancel_url: `${appUrl}?code=${uniquecode}&payment=cancelled`,
             metadata: {
