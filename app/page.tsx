@@ -318,8 +318,7 @@ export default function YearbookPickerPage() {
                   return (
                     <div key={photo.url} className="flex flex-col gap-1">
                       <div
-                        className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-[rgb(46,48,146)] ${isSelected ? 'ring-offset-2' : 'hover:focus-woodrose'
-                          } transition-all`}
+                        className={`relative cursor-pointer w-full aspect-[4/5] rounded-lg ring-2 ring-[rgb(46,48,146)] transition-all`}
                         onClick={() => setSelected(photo.url)}
                       >
                         <Image
@@ -358,7 +357,7 @@ export default function YearbookPickerPage() {
                 It costs ₱250.00
               </p>
               <button
-                className={`flex-1 py-2 rounded-full font-semibold text-white transition ${student.hasPurchased
+                className={`px-6 py-2 rounded-full font-semibold text-white transition ${student.hasPurchased
                   ? 'bg-gray-400 cursor-not-allowed'
                   : 'bg-woodrose-blue cursor-pointer'
                   }`}
