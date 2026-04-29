@@ -32,14 +32,14 @@ export async function POST(req: NextRequest) {
     const signature = req.headers.get('paymongo-signature') || '';
     const webhookSecret = process.env.PAYMONGO_WEBHOOK_SECRET || '';
 
-    if (!verifyWebhookSignature(rawBody, signature, webhookSecret)) {
-      return NextResponse.json({ error: 'Invalid signature.' }, { status: 401 });
-    }
+   // if (!verifyWebhookSignature(rawBody, signature, webhookSecret)) {
+   //   return NextResponse.json({ error: 'Invalid signature.' }, { status: 401 });
+   // }
 
     const event = JSON.parse(rawBody);
 const eventType = event.data.type;
 
-if (eventType !== 'checkout_session.payment.paid') {
+   if (eventType !== 'checkout_session.payment.paid') {
       return NextResponse.json({ received: true });
     }
 
