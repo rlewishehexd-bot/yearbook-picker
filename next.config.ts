@@ -1,9 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      'firebasestorage.googleapis.com', // Firebase Storage domain
-      'f004.backblazeb2.com', // Backblaze B2 domain
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'f004.backblazeb2.com',
+      },
     ],
   },
 };

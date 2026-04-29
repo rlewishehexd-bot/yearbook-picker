@@ -27,6 +27,7 @@ type Student = {
   hasChosen?: boolean;
   uniquecode: string;
   initialChosenName?: string;
+   hasPurchased?: boolean;
 };
 
 export default function YearbookPickerPage() {
@@ -61,13 +62,14 @@ export default function YearbookPickerPage() {
     return () => window.removeEventListener('resize', calculateHeight);
   }, []);
 
-  const fetchStudentData = async () => {
+
+const fetchStudentData = async (overrideCode?: string) => {
     setError('');
     setSuccess('');
     setStudent(null);
     setPhotos([]);
     setStudentDocId(null);
-    const trimmedCode = code.trim();
+    const trimmedCode = (overrideCode || code).trim();
     if (!trimmedCode) {
       setError('Please enter a code.');
       return;
@@ -125,6 +127,21 @@ export default function YearbookPickerPage() {
     }
   };
 
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const urlCode = params.get('code');
+  const payment = params.get('payment');
+
+  if (urlCode) {
+    setCode(urlCode);
+    if (payment === 'success') {
+      setSuccess('Payment successful! You can now download your photos.');
+    }
+    fetchStudentData(urlCode);
+  }
+}, []);
+  
+
   const handleConfirm = async () => {
     if (!student || !selected || !studentDocId) return;
     setLoading(true);
@@ -157,6 +174,59 @@ export default function YearbookPickerPage() {
       setLoading(false);
     }
   };
+
+const handlePurchase = async () => {
+  if (!student || !studentDocId) return;
+  setLoading(true);
+  try {
+    const response = await fetch('/api/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        uniquecode: student.uniquecode,
+        studentName: student.name,
+      }),
+    });
+    const data = await response.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      setError('Failed to create checkout. Please try again.');
+    }
+  } catch (err) {
+    console.error(err);
+    setError('Something went wrong.');
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleDownload = async () => {
+  if (!student) return;
+  setLoading(true);
+  try {
+    const response = await fetch(`/api/download?code=${student.uniquecode}`);
+    const data = await response.json();
+    if (data.files) {
+      for (const file of data.files) {
+        const link = document.createElement('a');
+        link.href = file.url;
+        link.download = file.fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
+    } else {
+      setError('Failed to get download links.');
+    }
+  } catch (err) {
+    console.error(err);
+    setError('Something went wrong.');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-white to-zinc-50 text-gray-900 p-6 flex flex-col items-center">
@@ -195,7 +265,7 @@ export default function YearbookPickerPage() {
               disabled={loading}
             />
             <button
-              onClick={fetchStudentData}
+              onClick={() => fetchStudentData()}
               className="bg-woodrose-blue text-white px-6 py-2 rounded-full font-semibold transition disabled:opacity-50"
               disabled={loading || !code}
             >
@@ -272,7 +342,42 @@ export default function YearbookPickerPage() {
                 })}
               </div>
             </div>
+
+{/* PURCHASE / DOWNLOAD SECTION */}
+{/* PURCHASE / DOWNLOAD SECTION */}
+<div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center gap-3">
+  <p className="text-gray-700 font-semibold text-center">
+    You may opt to purchase your high-resolution photos. <br />
+    It costs ₱250.00
+  </p>
+  <div className="flex w-full gap-3">
+    <button
+      className={`flex-1 py-2 rounded-full font-semibold text-white transition ${
+        student.hasPurchased
+          ? 'bg-gray-400 cursor-not-allowed'
+          : 'bg-woodrose-blue cursor-pointer'
+      }`}
+      disabled={!!student.hasPurchased}
+      onClick={() => handlePurchase()}
+    >
+      Purchase Digital Copies
+    </button>
+    <button
+      className={`flex-1 py-2 rounded-full font-semibold text-white transition ${
+        student.hasPurchased
+          ? 'bg-woodrose-blue cursor-pointer'
+          : 'bg-gray-400 cursor-not-allowed'
+      }`}
+      disabled={!student.hasPurchased}
+      onClick={() => handleDownload()}
+    >
+      Download
+    </button>
+  </div>
+</div>
           </div>
+
+
 
           {/* RIGHT COLUMN */}
           <div className="flex flex-col gap-4">
@@ -303,7 +408,7 @@ export default function YearbookPickerPage() {
             {/* CONFIRM SECTION */}
             <div className="border-2 border-woodrose-blue rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center">
               <p className="text-gray-700 font-semibold mb-3">
-                <p>
+                
                   {student.initialChosenName && !student.hasChosen ? (
                     <>
                       The school has chosen this as your photo. <br /> You can
@@ -318,11 +423,11 @@ export default function YearbookPickerPage() {
                   ) : (
                     'Please select a photo from the gallery.'
                   )}
-                </p>
+                
               </p>
               <button
                 onClick={handleConfirm}
-                className="bg-woodrose-blue text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex items-center"
+                className="bg-woodrose-blue text-white px-6 py-2 rounded-full font-semibold hover:bg-green-900 transition disabled:opacity-50 flex cursor-pointer items-center"
                 disabled={!selected || loading}
               >
                 {loading && <Loader2 className="w-5 h-5 animate-spin mr-2" />}
