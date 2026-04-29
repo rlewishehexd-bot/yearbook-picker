@@ -167,7 +167,7 @@ export default function YearbookPickerPage() {
           Tino Ley Digital Photography
         </h1>
         <p className="text-lg md:text-xl font-semibold text-gray-700">
-          International School Manila SY2025-2026
+          International School Manila SY2025 - 2026
         </p>
       </header>
 
